@@ -1,0 +1,11 @@
+@import "globals.scss";
+
+
+
+* {
+    box-sizing: border-box;
+}
+
+#hero {
+    height: calc(100vh - 56px);
+}
