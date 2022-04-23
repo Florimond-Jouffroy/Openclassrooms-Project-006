@@ -1,0 +1,52 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Inscription
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>Inscription</h1>
+
+		{{form_start(form)}}
+		<div class="mb-3">
+			{{form_label(form.email)}}
+			{{form_errors(form.email)}}
+			{{form_widget(form.email)}}
+			{{form_help(form.email)}}
+		</div>
+		<div class="mb-3">
+			{{form_label(form.firstname)}}
+			{{form_errors(form.firstname)}}
+			{{form_widget(form.firstname)}}
+			{{form_help(form.firstname)}}
+		</div>
+		<div class="mb-3">
+			{{form_label(form.lastname)}}
+			{{form_errors(form.lastname)}}
+			{{form_widget(form.lastname)}}
+			{{form_help(form.lastname)}}
+		</div>
+		<div class="mb-3">
+			{{form_label(form.password.first)}}
+			{{form_errors(form.password.first)}}
+			{{form_widget(form.password.first)}}
+			{{form_help(form.password.first)}}
+		</div>
+		<div class="mb-3">
+			{{form_label(form.password.second)}}
+			{{form_errors(form.password.second)}}
+			{{form_widget(form.password.second)}}
+			{{form_help(form.password.second)}}
+		</div>
+
+		<button type="submit" class="btn btn-primary">
+			S'enregistrer
+		</button>
+
+		{{form_end(form)}}
+	</div>
+
+
+{% endblock %}
