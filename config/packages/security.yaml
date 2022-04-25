@@ -23,11 +23,11 @@ security:
             form_login:
               login_path: user_login
               check_path: user_login
-              usernam_parameter: login[email],
+              username_parameter: login[email]
               password_parameter: login[password]
 
             logout:
-              logout: user_logout
+              path: user_logout
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
