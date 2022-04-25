@@ -30,6 +30,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(type: 'string', length: 255)]
   private $lastname;
 
+  #[ORM\Column(type: 'string', length: 255, nullable: true)]
+  private $validation_token;
+
   public function getId(): ?int
   {
     return $this->id;
@@ -141,5 +144,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     $this->lastname = $lastname;
 
     return $this;
+  }
+
+  public function getValidationToken(): ?string
+  {
+    return $this->validation_token;
+  }
+
+  public function setValidationToken(?string $validation_token): self
+  {
+    $this->validation_token = $validation_token;
+
+    return $this;
+  }
+
+  public function isAccountValidated(): bool
+  {
+    return ($this->getValidationToken() === null ? true : false);
   }
 }

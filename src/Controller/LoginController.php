@@ -38,6 +38,7 @@ class LoginController extends AbstractController
     $this->passwordHasher = $userPasswordHasher;
   }
 
+
   #[Route('/login', name: 'user_login')]
   public function login(AuthenticationUtils $authenticationUtils)
   {
@@ -49,10 +50,12 @@ class LoginController extends AbstractController
     ]);
   }
 
+
   #[Route('/logout', name: 'user_logout')]
   public function logout()
   {
   }
+
 
   #[Route('/forgot-password', name: 'user_forgotPassword')]
   public function forgotPassword(Request $request, TokenGeneratorInterface $tokenGenerator)
@@ -86,14 +89,14 @@ class LoginController extends AbstractController
         $this->em->flush();
       }
 
-      $url = $this->generateUrl('user_resetPassword', ['token' => $passwordRequest->getToken(), UrlGeneratorInterface::ABSOLUTE_URL]);
+      $url = $this->generateUrl('user_resetPassword', ['token' => $passwordRequest->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 
 
       $emailParameters = array(
         'from' => 'noreply@snowtrick.com',
         'to' => new Address($userEmail),
         'subject' => "Reset Password",
-        'htmlTemplate' => 'email/resetPassword.html.twig',
+        'htmlTemplate' => 'email/user/resetPassword.html.twig',
       );
 
       $contextParameters = array(
@@ -106,7 +109,7 @@ class LoginController extends AbstractController
     }
 
     return $this->render('user/password/emailRequest.html.twig', [
-      'form' => $form
+      'form' => $form->createView()
     ]);
   }
 
