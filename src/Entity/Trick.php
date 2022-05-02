@@ -2,11 +2,16 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimeStampableTrait;
-use App\Repository\TrickRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TrickRepository;
+use App\Entity\Traits\TimeStampableTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity(
+  'name',
+  message: 'Ce nom est déjà utilisé, trouvez en un autre !'
+)]
 #[ORM\HasLifecycleCallbacks()]
 class Trick
 {
