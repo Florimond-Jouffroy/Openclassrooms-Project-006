@@ -3,9 +3,41 @@
 
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 #hero {
-    height: calc(100vh - 56px);
+  height: calc(100vh - 56px);
+}
+
+.trick-picture {
+  object-fit: cover;
+  object-position: center;
+  max-height: 400px;
+  padding: 0 !important;
+}
+
+
+
+#options {
+  margin-right: 1em;
+  margin-top: 1em;
+  position: absolute;
+
+  a {
+    padding: 0.5em;
+    background-color: #fff;
+
+    &:hover {
+      background-color: blanchedalmond;
+    }
+
+    &:first-child {
+      border-radius: 5px 0px 0px 5px;
+    }
+
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+  }
 }

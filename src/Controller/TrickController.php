@@ -47,4 +47,12 @@ class TrickController extends AbstractController
       'form' => $form->createView(),
     ]);
   }
+
+  #[Route('/trick/{id}', name: 'trick_show')]
+  public function show(Trick $trick)
+  {
+    return $this->render('trick/show.html.twig', [
+      'trick' => $trick
+    ]);
+  }
 }

@@ -1,0 +1,74 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{trick.name}}
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+
+		<div class="d-flex justify-content-end mt-5">
+
+
+			<img class="shadow w-100 trick-picture rounded" src="https://i.pinimg.com/originals/df/39/25/df392528a612019c40545b08a1706f3b.jpg" alt="">
+
+
+			{% if app.user %}
+				<div id="options" class="d-flex">
+					<a href="#">
+						<i class="bi bi-pencil-fill"></i>
+					</a>
+					<a href="#">
+						<i class="bi bi-trash-fill"></i>
+					</a>
+				</div>
+			{% endif %}
+		</div>
+
+		<div class="mt-3">
+			<h1 class="text-uppercase">{{trick.name}}</h1>
+			<h4>Catégorie :unknow</h4>
+
+			<ul class="list-inline">
+				<li class="list-inline-item">Par : Admin</li>
+				|
+				<li class="list-inline-item">
+					Ajouté le
+					{{trick.createdAt | date("m/d/Y")}}
+					(Mise a jour le :
+					{{trick.updatedAt| date("m/d/Y")}})
+				</li>
+				|
+				<li class="list-inline-item">
+					<a href="#">0 commentaires</a>
+				</li>
+			</ul>
+		</div>
+
+
+		<div class=" mb-4 mt-5 bg-light rounded-3">
+			{{trick.description}}
+		</div>
+
+		<div class="text-center">
+			<a href="#" id="loadMedia" class="d-md-block d-lg-none">
+				<button class="btn btn-outline-secondary">Afficher les médias</button>
+			</a>
+			<a href="#" id="hideMedia" class="d-md-none d-lg-none d-none">
+				<button class="btn btn-outline-secondary mt-3">Masquer les médias</button>
+			</a>
+		</div>
+
+		{% if app.user %}
+			<form action="#" class="mt-5">
+				<div class="form-group row">
+					<div class="col-sm-6">
+						<input type="text" class="form-control form-control-lg" id="commentaire"></input>
+				</div>
+				<button type="submit" class="btn btn-primary col-sm-6">Laisser un commentaire</button>
+			</div>
+		</form>
+	{% endif %}
+
+
+</div>{% endblock %}
