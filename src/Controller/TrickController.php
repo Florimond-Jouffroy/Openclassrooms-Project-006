@@ -78,4 +78,14 @@ class TrickController extends AbstractController
 
     ]);
   }
+
+  #[Route('/trick/{id}/delete', name: 'trick_delete')]
+  public function delete(Trick $trick)
+  {
+
+    $this->em->remove($trick);
+    $this->em->flush();
+
+    return $this->redirectToRoute('home');
+  }
 }

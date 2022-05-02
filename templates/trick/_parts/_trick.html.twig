@@ -7,16 +7,7 @@
 
 			<a href="{{path('trick_show', {'id':trick.id}) }}" class="btn btn-outline-primary">En Lire plus</a>
 
-			{% if app.user %}
-				<div class="flex-grow-1 d-flex justify-content-end">
-					<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
-						<i class="bi bi-pencil-fill"></i>
-					</a>
-					<a href="#" class="btn btn-primary mx-1">
-						<i class="bi bi-trash-fill"></i>
-					</a>
-				</div>
-			{% endif %}
+			{% include 'trick/_parts/_options.html.twig' with {trick: trick} only %}
 		</div>
 
 	</div>

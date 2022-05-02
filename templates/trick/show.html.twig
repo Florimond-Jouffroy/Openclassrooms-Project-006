@@ -13,16 +13,7 @@
 			<img class="shadow w-100 trick-picture rounded" src="https://i.pinimg.com/originals/df/39/25/df392528a612019c40545b08a1706f3b.jpg" alt="">
 
 
-			{% if app.user %}
-				<div id="options" class="d-flex">
-					<a href="{{path('trick_edit', {'id': trick.id} )}}">
-						<i class="bi bi-pencil-fill"></i>
-					</a>
-					<a href="#">
-						<i class="bi bi-trash-fill"></i>
-					</a>
-				</div>
-			{% endif %}
+			{% include 'trick/_parts/_options.html.twig' with {trick: trick} only %}
 		</div>
 
 		<div class="mt-3">
