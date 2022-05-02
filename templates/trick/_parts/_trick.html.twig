@@ -5,11 +5,11 @@
 		<h5 class="card-title text-uppercase">{{ trick.name }}</h5>
 		<div class="d-flex flex-row mt-3">
 
-			<a href="{{path('trick_show', {'id':trick.id})}}" class="btn btn-outline-primary">En Lire plus</a>
+			<a href="{{path('trick_show', {'id':trick.id}) }}" class="btn btn-outline-primary">En Lire plus</a>
 
 			{% if app.user %}
 				<div class="flex-grow-1 d-flex justify-content-end">
-					<a href="#" class="btn btn-primary mx-1">
+					<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
 						<i class="bi bi-pencil-fill"></i>
 					</a>
 					<a href="#" class="btn btn-primary mx-1">

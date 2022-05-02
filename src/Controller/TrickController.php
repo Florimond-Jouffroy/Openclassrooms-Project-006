@@ -39,7 +39,7 @@ class TrickController extends AbstractController
       $this->em->persist($trick);
       $this->em->flush();
 
-      return $this->redirectToRoute('home');
+      return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
     }
 
 
@@ -53,6 +53,29 @@ class TrickController extends AbstractController
   {
     return $this->render('trick/show.html.twig', [
       'trick' => $trick
+    ]);
+  }
+
+
+  #[Route('/trick/{id}/edit', name: 'trick_edit')]
+  public function edit(Trick $trick, Request $request)
+  {
+
+    $form = $this->createForm(TrickType::class, $trick);
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+
+      $this->em->persist($trick);
+      $this->em->flush();
+
+      return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
+    }
+
+    return $this->render('trick/edit.html.twig', [
+      'form' => $form->createView(),
+
     ]);
   }
 }
