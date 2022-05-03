@@ -3,6 +3,14 @@
 	<div class="card-body">
 
 		<h5 class="card-title text-uppercase">{{ trick.name }}</h5>
+		<h6 class="card-subtitle mb-2 text-muted">
+			Catégorie :
+			{% if trick.category %}
+				{{trick.category.name}}
+			{% else %}
+				unknow
+			{% endif %}
+		</h6>
 		<div class="d-flex flex-row mt-3">
 
 			<a href="{{path('trick_show', {'id':trick.id}) }}" class="btn btn-outline-primary">En Lire plus</a>
