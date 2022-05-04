@@ -1,5 +1,7 @@
 <div class="card m-3" style="width:300px">
-
+	{% if trick.mainPicture  %}
+		<img class="rounded-top" src=" {{asset('pictures/' ~ trick.mainPicture.name)}} " alt=" ">
+	{% endif %}
 	<div class="card-body">
 
 		<h5 class="card-title text-uppercase">{{ trick.name }}</h5>

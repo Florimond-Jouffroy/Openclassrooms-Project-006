@@ -126,4 +126,9 @@ class Trick
 
     return $this;
   }
+
+  public function getMainPicture()
+  {
+    return $this->pictures->first();
+  }
 }

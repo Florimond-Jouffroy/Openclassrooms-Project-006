@@ -22,9 +22,12 @@ class Picture
   private $name;
 
   #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'pictures')]
-  private $trick;
+  private Trick $trick;
 
   private ?UploadedFile $file = null;
+
+  #[ORM\Column(type: 'string', length: 255)]
+  private $filepath;
 
   public function __construct(private string $pictureUploadDirectory)
   {
@@ -69,6 +72,18 @@ class Picture
     $this->file = $file;
   }
 
+  public function getFilepath(): ?string
+  {
+    return $this->filepath;
+  }
+
+  public function setFilepath(string $filepath): self
+  {
+    $this->filepath = $filepath;
+
+    return $this;
+  }
+
   #[ORM\PrePersist()]
   #[ORM\PreUpdate()]
   public function upload(): void
@@ -78,12 +93,12 @@ class Picture
       return;
     }
 
-
     $uploadTo = $this->pictureUploadDirectory;
-    $fileName =  uniqid() . '.' . $this->getFile()->guessExtension();
-    $this->setName($fileName);
+    $fileName =  uniqid();
 
-    $this->getFile()->move($uploadTo, $fileName);
+    $this->name = sprintf('%s.%s', $fileName, $this->getFile()->getClientOriginalExtension());
+    $this->setFilepath($uploadTo . '/' . $this->name);
+    $this->getFile()->move($uploadTo, $this->name);
   }
 
 
@@ -91,6 +106,6 @@ class Picture
   #[ORM\PostRemove()]
   public function onDelete()
   {
-    unlink($this->pictureUploadDirectory . $this->name);
+    unlink($this->filepath);
   }
 }

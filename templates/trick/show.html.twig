@@ -7,9 +7,24 @@
 {% block body %}
 	<div class="container">
 
-		<div class="d-flex justify-content-end mt-5">
-			<img class="shadow w-100 trick-picture rounded" src="https://i.pinimg.com/originals/df/39/25/df392528a612019c40545b08a1706f3b.jpg" alt="">
-			{% include 'trick/_parts/_options.html.twig' with {trick: trick} only %}
+
+		<div class="trickHeader">
+
+			{% if app.user %}
+				<div class="trickHeader__options">
+					<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
+						<i class="bi bi-pencil-fill"></i>
+					</a>
+					<a href="{{path('trick_delete', {id:trick.id})}}" class="btn btn-primary mx-1">
+						<i class="bi bi-trash-fill"></i>
+					</a>
+				</div>
+			{% endif %}
+
+			{% if trick.mainPicture  %}
+				<img class="trickHeader__mainPicture" src="{{asset('pictures/' ~ trick.mainPicture.name)}}" alt="">
+			{% endif %}
+
 		</div>
 
 		<div class="mt-3">
@@ -40,7 +55,7 @@
 		</div>
 
 
-		<div class=" mb-4 mt-5 bg-light rounded-3">
+		<div class=" mb-4 mt-5 p-3 bg-light rounded-3">
 			{{trick.description}}
 		</div>
 
