@@ -7,8 +7,10 @@ use App\Form\Trick\TrickType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class TrickController extends AbstractController
 {
@@ -66,13 +68,37 @@ class TrickController extends AbstractController
   public function edit(Trick $trick, Request $request)
   {
 
+    $originalPictures = new ArrayCollection();
+    foreach ($trick->getPictures() as $picture) {
+      $originalPictures->add($picture);
+    }
+
     $form = $this->createForm(TrickType::class, $trick);
 
     $form->handleRequest($request);
 
+
     if ($form->isSubmitted() && $form->isValid()) {
 
-      $this->em->persist($trick);
+      foreach ($originalPictures as $picture) {
+
+        if (false === $trick->getPictures()->contains($picture)) {
+
+          $this->em->remove($picture);
+        }
+      }
+
+      foreach ($trick->getPictures() as $picture) {
+        if ($picture->getFile() instanceof UploadedFile) {
+          if (null !== $picture->getId()) {
+            $picture->setName(sprintf('__UPDATING__%s', $picture->getName()));
+          } else {
+            $picture->setTrick($trick);
+          }
+        }
+      }
+
+
       $this->em->flush();
 
       return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);

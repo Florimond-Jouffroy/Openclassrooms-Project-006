@@ -93,12 +93,23 @@ class Picture
       return;
     }
 
-    $uploadTo = $this->pictureUploadDirectory;
+
     $fileName =  uniqid();
 
-    $this->name = sprintf('%s.%s', $fileName, $this->getFile()->getClientOriginalExtension());
+    if (str_contains($this->name, '__UPDATING__')) {
+      unlink($this->filepath);
+      $this->name = str_replace('__UPDATING__', '', $this->name);
+      $uploadTo = str_replace('/' . $this->name, '', $this->filepath);
+    } else {
+      $this->name = sprintf('%s.%s', $fileName, $this->getFile()->getClientOriginalExtension());
+      $uploadTo = $this->pictureUploadDirectory;
+    }
+
+
+
     $this->setFilepath($uploadTo . '/' . $this->name);
     $this->getFile()->move($uploadTo, $this->name);
+    $this->file = null;
   }
 
 
