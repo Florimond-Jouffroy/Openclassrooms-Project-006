@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
 use App\Entity\Traits\TimeStampableTrait;
@@ -33,6 +35,14 @@ class Trick
 
   #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'tricks')]
   private $category;
+
+  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist', 'remove'])]
+  private $pictures;
+
+  public function __construct()
+  {
+    $this->pictures = new ArrayCollection();
+  }
 
   public function getId(): ?int
   {
@@ -77,13 +87,43 @@ class Trick
 
   public function getCategory(): ?Category
   {
-      return $this->category;
+    return $this->category;
   }
 
   public function setCategory(?Category $category): self
   {
-      $this->category = $category;
+    $this->category = $category;
 
-      return $this;
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Picture>
+   */
+  public function getPictures(): Collection
+  {
+    return $this->pictures;
+  }
+
+  public function addPicture(Picture $picture): self
+  {
+    if (!$this->pictures->contains($picture)) {
+      $this->pictures[] = $picture;
+      $picture->setTrick($this);
+    }
+
+    return $this;
+  }
+
+  public function removePicture(Picture $picture): self
+  {
+    if ($this->pictures->removeElement($picture)) {
+      // set the owning side to null (unless already changed)
+      if ($picture->getTrick() === $this) {
+        $picture->setTrick(null);
+      }
+    }
+
+    return $this;
   }
 }

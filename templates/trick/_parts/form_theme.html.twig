@@ -1,0 +1,13 @@
+{% use 'bootstrap_5_layout.html.twig' %}
+
+
+{% block file_widget %}
+
+	{{- block('form_widget') -}}
+	<p class="my-3">
+		<button type="button" class="btn btn-danger delete-picture-btn">
+			<i class="bi bi-trash"></i>
+		</button>
+	</p>
+
+{% endblock %}

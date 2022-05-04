@@ -7,6 +7,7 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,10 +47,16 @@ class TrickType extends AbstractType
       ->add('category', EntityType::class, [
         'label' => "Catégorie",
         'placeholder' => "-- Choisir une catégorie --",
+        'required' => false,
         'class' => Category::class,
         'choice_label' => function (Category $category) {
           return strtoupper($category->getName());
         }
+      ])
+      ->add('pictures', CollectionType::class, [
+        'entry_type' => PictureType::class,
+        'allow_add' => true,
+        'allow_delete' => true
       ]);
   }
 

@@ -8,11 +8,7 @@
 	<div class="container">
 
 		<div class="d-flex justify-content-end mt-5">
-
-
 			<img class="shadow w-100 trick-picture rounded" src="https://i.pinimg.com/originals/df/39/25/df392528a612019c40545b08a1706f3b.jpg" alt="">
-
-
 			{% include 'trick/_parts/_options.html.twig' with {trick: trick} only %}
 		</div>
 
@@ -48,6 +44,16 @@
 			{{trick.description}}
 		</div>
 
+
+		<div class="trickPictures">
+			{% for picture in trick.pictures %}
+
+				<img src="{{asset('pictures/' ~ picture.name)}}" alt="" class="trickPictures__picture">
+
+			{% endfor %}
+		</div>
+
+
 		<div class="text-center">
 			<a href="#" id="loadMedia" class="d-md-block d-lg-none">
 				<button class="btn btn-outline-secondary">Afficher les médias</button>
@@ -56,6 +62,7 @@
 				<button class="btn btn-outline-secondary mt-3">Masquer les médias</button>
 			</a>
 		</div>
+
 
 		{% if app.user %}
 			<form action="#" class="mt-5">

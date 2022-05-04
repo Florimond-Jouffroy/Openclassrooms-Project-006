@@ -36,6 +36,11 @@ class TrickController extends AbstractController
 
       $trick->setSlug($this->sluger->slug($trick->getName()));
 
+
+      foreach ($trick->getPictures() as $picture) {
+        $picture->setTrick($trick);
+      }
+
       $this->em->persist($trick);
       $this->em->flush();
 
