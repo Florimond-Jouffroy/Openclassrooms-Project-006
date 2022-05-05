@@ -27,3 +27,12 @@
 
 
 {% endblock %}
+
+{% block link_video_widget %}
+	{{- block('form_widget') -}}
+	<p class="my-3">
+		<button type="button" class="btn btn-danger delete-video-btn">
+			<i class="bi bi-trash"></i>
+		</button>
+	</p>
+{% endblock %}

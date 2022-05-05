@@ -60,11 +60,15 @@
 		</div>
 
 
-		<div class="trickPictures">
+		<div class="trickMedias">
 			{% for picture in trick.pictures %}
 
-				<img src="{{asset('pictures/' ~ picture.name)}}" alt="" class="trickPictures__picture">
+				<img src="{{asset('pictures/' ~ picture.name)}}" alt="" class="trickMedias__picture">
 
+			{% endfor %}
+
+			{% for video in trick.videos %}
+				<iframe class="trickMedias__video" frameborder="0" type="text/html" src="{{ video.link }}" width="300" height="200" allowfullscreen></iframe>
 			{% endfor %}
 		</div>
 

@@ -39,9 +39,13 @@ class Trick
   #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist', 'remove'])]
   private $pictures;
 
+  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist', 'remove'])]
+  private $videos;
+
   public function __construct()
   {
     $this->pictures = new ArrayCollection();
+    $this->videos = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -130,5 +134,35 @@ class Trick
   public function getMainPicture()
   {
     return $this->pictures->first();
+  }
+
+  /**
+   * @return Collection<int, Video>
+   */
+  public function getVideos(): Collection
+  {
+    return $this->videos;
+  }
+
+  public function addVideo(Video $video): self
+  {
+    if (!$this->videos->contains($video)) {
+      $this->videos[] = $video;
+      $video->setTrick($this);
+    }
+
+    return $this;
+  }
+
+  public function removeVideo(Video $video): self
+  {
+    if ($this->videos->removeElement($video)) {
+      // set the owning side to null (unless already changed)
+      if ($video->getTrick() === $this) {
+        $video->setTrick(null);
+      }
+    }
+
+    return $this;
   }
 }

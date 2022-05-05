@@ -40,7 +40,16 @@ class TrickController extends AbstractController
 
 
       foreach ($trick->getPictures() as $picture) {
+
+        if (!$picture->getFile() instanceof UploadedFile) {
+          $trick->getPictures()->removeElement($picture);
+        }
+
         $picture->setTrick($trick);
+      }
+
+      foreach ($trick->getVideos() as $video) {
+        $video->setTrick($trick);
       }
 
       $this->em->persist($trick);
@@ -69,9 +78,16 @@ class TrickController extends AbstractController
   {
 
     $originalPictures = new ArrayCollection();
+    $originalVideos = new ArrayCollection();
+
     foreach ($trick->getPictures() as $picture) {
       $originalPictures->add($picture);
     }
+
+    foreach ($trick->getVideos() as $video) {
+      $originalVideos->add($video);
+    }
+
 
     $form = $this->createForm(TrickType::class, $trick);
 
@@ -83,13 +99,20 @@ class TrickController extends AbstractController
       foreach ($originalPictures as $picture) {
 
         if (false === $trick->getPictures()->contains($picture)) {
-
           $this->em->remove($picture);
         }
       }
 
+      foreach ($originalVideos as $video) {
+
+        if (false === $trick->getVideos()->contains($video)) {
+          $this->em->remove($video);
+        }
+      }
+
+
       foreach ($trick->getPictures() as $picture) {
-        dump($picture);
+
         if (!$picture->getFile() instanceof UploadedFile && null === $picture->getName()) {
           $trick->getPictures()->removeElement($picture);
         }
@@ -101,6 +124,13 @@ class TrickController extends AbstractController
             $picture->setTrick($trick);
           }
         }
+      }
+
+      foreach ($trick->getVideos() as $video) {
+        if (null === $video->getLink()) {
+          $trick->getVideos()->removeElement($video);
+        }
+        $video->setTrick($trick);
       }
 
 
