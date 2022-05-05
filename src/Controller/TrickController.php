@@ -89,6 +89,11 @@ class TrickController extends AbstractController
       }
 
       foreach ($trick->getPictures() as $picture) {
+        dump($picture);
+        if (!$picture->getFile() instanceof UploadedFile && null === $picture->getName()) {
+          $trick->getPictures()->removeElement($picture);
+        }
+
         if ($picture->getFile() instanceof UploadedFile) {
           if (null !== $picture->getId()) {
             $picture->setName(sprintf('__UPDATING__%s', $picture->getName()));
