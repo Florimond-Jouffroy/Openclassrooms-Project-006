@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{user.firstname}}
+	profile
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row mt-5">
+
+			<div class="d-flex align-items-center justify-content-start  p-3 bg-white rounded shadow-sm mb-5">
+				<img src="https://github.com/mdo.png" alt="mdo" width="80" height="80" class="rounded-circle">
+				<h4 class="mx-5">{{user.firstname}}
+					{{user.lastname}}</h4>
+			</div>
+
+		</div>
+		<div class="row justify-content-between">
+
+			<div class="ml-1 p-3 bg-white rounded shadow-sm col-lg-6 col-md-12 ">
+
+				<h4>Paramètres du compte</h4>
+				{{form_start(form)}}
+				<div class="mb-3">
+					{{form_label(form.firstname)}}
+					{{form_errors(form.firstname)}}
+					{{form_widget(form.firstname)}}
+					{{form_help(form.firstname)}}
+				</div>
+				<div class="mb-3">
+					{{form_label(form.lastname)}}
+					{{form_errors(form.lastname)}}
+					{{form_widget(form.lastname)}}
+					{{form_help(form.lastname)}}
+				</div>
+				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+					<button type="submit" class="btn btn-primary">
+						Enregistrer
+					</button>
+				</div>
+				{{form_end(form)}}
+			</div>
+
+			<!-- TODO
+						<div class="col-lg-5 d-flex flex-column align-items-center justify-content-center p-3 bg-white rounded shadow-sm col-md-12 ">
+							<img src="https://github.com/mdo.png" alt="mdo" width="120" height="120" class="rounded-circle mb-5">
+							<button type="button" class="btn btn-primary">Changer mon image de profile</button>
+						</div>
+			      -->
+		</div>
+
+	</div>
+</div></div>{% endblock %}

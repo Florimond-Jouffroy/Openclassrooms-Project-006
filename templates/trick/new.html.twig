@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	New Trick
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>New Trick</h1>
+
+		{% include 'trick/_parts/form_trick.html.twig' with {form: form} only %}
+
+	</div>
+
+{% endblock %}

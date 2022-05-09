@@ -1,0 +1,24 @@
+<div class="card m-3" style="width:300px">
+	{% if trick.mainPicture  %}
+		<img class="rounded-top" src=" {{asset('pictures/' ~ trick.mainPicture.name)}} " alt=" ">
+	{% endif %}
+	<div class="card-body">
+
+		<h5 class="card-title text-uppercase">{{ trick.name }}</h5>
+		<h6 class="card-subtitle mb-2 text-muted">
+			Catégorie :
+			{% if trick.category %}
+				{{trick.category.name}}
+			{% else %}
+				unknow
+			{% endif %}
+		</h6>
+		<div class="d-flex flex-row mt-3">
+
+			<a href="{{path('trick_show', {'id':trick.id}) }}" class="btn btn-outline-primary">En Lire plus</a>
+
+			{% include 'trick/_parts/_options.html.twig' with {trick: trick} only %}
+		</div>
+
+	</div>
+</div>

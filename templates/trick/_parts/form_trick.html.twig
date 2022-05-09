@@ -1,0 +1,43 @@
+{% form_theme form 'trick/_parts/form_theme.html.twig' %}
+
+
+{{ form_start(form) }}
+
+{{ form_row(form.name)}}
+{{ form_row(form.description)}}
+{{ form_row(form.category)}}
+
+<div class="mb-3">
+	{{ form_label(form.pictures) }}
+
+	<button type="button" class="btn btn-primary btn-lg add-picture-btn" data-target="trick_pictures">
+		<i class="bi bi-plus"></i>
+	</button>
+
+	{{ form_widget(form.pictures, {attr: {class:'row row-cols-12 row-cols-md-3 row-cols-lg-4'}}) }}
+</div>
+
+
+<div class="mb-3">
+	{{ form_label(form.videos) }}
+
+	<button type="button" class="btn btn-primary btn-lg add-video-btn" data-target="trick_videos">
+		<i class="bi bi-plus"></i>
+	</button>
+
+	{{ form_widget(form.videos , {attr: {class:'row row-cols-12 row-cols-md-3 row-cols-lg-4'}}) }}
+</div>
+
+
+<div class="mt-5">
+	<button type="submit" class="btn btn-primary">Enregistrer</button>
+	<a href="{{ path('home') }}" class="btn btn-dark mx-2">Annuler</a>
+</div>
+
+{{ form_end(form) }}
+
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('collectionPictures') }}
+	{{ encore_entry_script_tags('collectionVideos') }}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Connexion
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>Connexion</h1>
+		{{form_start(form)}}
+
+		<div class="mb-3">
+			{{form_label(form.email)}}
+			{{form_errors(form.email)}}
+			{{form_widget(form.email)}}
+			{{form_help(form.email)}}
+		</div>
+
+		<div class="mb-3">
+			{{form_label(form.password)}}
+			{{form_errors(form.password)}}
+			{{form_widget(form.password)}}
+			{{form_help(form.password)}}
+		</div>
+
+		<button type="submit" class="btn btn-primary">Connexion</button>
+		{{form_end(form)}}
+		<a href="{{path('user_forgotPassword')}}">Mot de passe oublié</a>
+
+
+	</div>
+
+{% endblock %}
