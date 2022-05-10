@@ -43,13 +43,14 @@
 				|
 				<li class="list-inline-item">
 					Ajouté le
-					{{trick.createdAt | date("m/d/Y")}}
+					{{trick.createdAt | date("d/m/Y")}}
 					(Mise a jour le :
-					{{trick.updatedAt| date("m/d/Y")}})
+					{{trick.updatedAt| date("d/m/Y")}})
 				</li>
 				|
 				<li class="list-inline-item">
-					<a href="#">0 commentaires</a>
+					<a href="#comments">{{trick.comments.count}}
+						commentaires</a>
 				</li>
 			</ul>
 		</div>
@@ -84,15 +85,38 @@
 
 
 		{% if app.user %}
-			<form action="#" class="mt-5">
-				<div class="form-group row">
-					<div class="col-sm-6">
-						<input type="text" class="form-control form-control-lg" id="commentaire"></input>
+			<div class="my-3 p-3 bg-body rounded shadow-sm ">
+				{{ form_start(form) }}
+				{{ form_row(form.content)}}
+				<div class="mt-5">
+					<button type="submit" class="btn btn-primary">Envoyer</button>
 				</div>
-				<button type="submit" class="btn btn-primary col-sm-6">Laisser un commentaire</button>
+				{{ form_end(form) }}
 			</div>
-		</form>
-	{% endif %}
+		{% endif %}
 
+		<div class="my-3 p-3 bg-body rounded shadow-sm" id="comments">
+			<h6 class="border-bottom pb-2 mb-0">Commentaires récents</h6>
+			{% for comment in trick.comments %}
 
-</div>{% endblock %}
+				<div class="d-flex text-muted pt-3">
+
+					<img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="bd-placeholder-img flex-shrink-0 me-2 rounded">
+
+					<p class="pb-3 mb-0 small lh-sm border-bottom w-100">
+						<strong class="d-block text-gray-dark pb-1">@{{comment.user.firstname}}
+							{{comment.user.lastname}}
+							-
+							{{comment.updatedAt| date("d/m/Y")}}</strong>
+						{{comment.content}}
+					</p>
+				</div>
+
+			{% endfor %}
+			<small class="d-block text-end mt-3">
+				<a href="#">Tous les commentaires</a>
+			</small>
+		</div>
+
+	</div>
+{% endblock %}
