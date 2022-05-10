@@ -21,7 +21,7 @@ class LoginType extends AbstractType
         ]
       ])
       ->add('password', PasswordType::class, [
-        'label' => "password",
+        'label' => "Password",
         'constraints' => [
           new Assert\NotBlank(message: "Vous devez entrez votre mot de passe !")
         ]
