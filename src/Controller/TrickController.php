@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\Trick\CommentType;
 use App\Form\Trick\TrickType;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,14 +18,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class TrickController extends AbstractController
 {
 
-  private $em, $sluger;
+  private $em, $sluger, $commentRepository;
 
   public function __construct(
     EntityManagerInterface $em,
-    SluggerInterface $sluger
+    SluggerInterface $sluger,
+    CommentRepository $commentRepository,
   ) {
     $this->em = $em;
     $this->sluger = $sluger;
+    $this->commentRepository = $commentRepository;
   }
 
 
@@ -66,9 +69,28 @@ class TrickController extends AbstractController
     ]);
   }
 
-  #[Route('/trick/{id}', name: 'trick_show')]
-  public function show(Trick $trick, Request $request)
+  #[Route('/trick/{id}/{page<\d+>?1}', name: 'trick_show')]
+  public function show(Trick $trick, Request $request, $page = 1)
   {
+
+    $limit = 5;
+    if (is_null($page) || $page < 1) {
+      $page = 1;
+    }
+
+    $nbComments = $trick->getComments()->count();
+    $nbPages = ceil($nbComments / $limit);
+
+
+    if ($page > $nbPages & $nbPages) {
+      throw $this->createNotFoundException("cette page n'existe pas");
+    }
+
+
+
+    $query = $this->commentRepository->findAllCommentTrick($page, $limit, $trick);
+
+
     $comment = new Comment;
     $form = $this->createForm(CommentType::class, $comment);
     $form->handleRequest($request);
@@ -87,6 +109,9 @@ class TrickController extends AbstractController
     return $this->render('trick/show.html.twig', [
       'trick' => $trick,
       'form' => $form->createView(),
+      'comments' => $query,
+      'nbPages' => $nbPages,
+      'currentPage' => $page,
     ]);
   }
 

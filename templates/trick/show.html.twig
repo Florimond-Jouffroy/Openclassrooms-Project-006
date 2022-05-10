@@ -97,7 +97,7 @@
 
 		<div class="my-3 p-3 bg-body rounded shadow-sm" id="comments">
 			<h6 class="border-bottom pb-2 mb-0">Commentaires récents</h6>
-			{% for comment in trick.comments %}
+			{% for comment in comments %}
 
 				<div class="d-flex text-muted pt-3">
 
@@ -111,11 +111,21 @@
 						{{comment.content}}
 					</p>
 				</div>
-
 			{% endfor %}
-			<small class="d-block text-end mt-3">
-				<a href="#">Tous les commentaires</a>
-			</small>
+
+
+			<nav aria-label="..." class="pt-5">
+				<ul class="pagination pagination-sm justify-content-center">
+
+					{% for i in 1..nbPages %}
+
+						<li class="{% if currentPage == loop.index %}disabled{% endif %} page-item">
+							<a class="page-link" href="{{ path('trick_show', {'id': trick.id, 'page': loop.index }) }}#comments">{{ loop.index }}</a>
+						</li>
+					{% endfor %}
+
+				</ul>
+			</nav>
 		</div>
 
 	</div>
