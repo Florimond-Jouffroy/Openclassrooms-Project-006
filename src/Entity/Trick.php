@@ -45,6 +45,9 @@ class Trick
   #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
   private $comments;
 
+  #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
+  private $user;
+
   public function __construct()
   {
     $this->pictures = new ArrayCollection();
@@ -196,6 +199,18 @@ class Trick
               $comment->setTrick(null);
           }
       }
+
+      return $this;
+  }
+
+  public function getUser(): ?User
+  {
+      return $this->user;
+  }
+
+  public function setUser(?User $user): self
+  {
+      $this->user = $user;
 
       return $this;
   }
