@@ -41,6 +41,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
   private $tricks;
 
+  #[ORM\OneToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
+  private $pictureProfile;
+
   public function __construct()
   {
       $this->comments = new ArrayCollection();
@@ -233,6 +236,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
               $trick->setUser(null);
           }
       }
+
+      return $this;
+  }
+
+  public function getPictureProfile(): ?Picture
+  {
+      return $this->pictureProfile;
+  }
+
+  public function setPictureProfile(?Picture $pictureProfile): self
+  {
+      $this->pictureProfile = $pictureProfile;
 
       return $this;
   }

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Form\Trick\PictureType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -60,6 +61,10 @@ class RegistrationType extends AbstractType
             maxMessage: "Votre nom ne doit pas faire plus de {{ limit }} caractères"
           )
         ]
+      ])
+      ->add('pictureProfile', PictureType::class, [
+        'label' => 'Image de profile',
+        'constraints' => []
       ]);
   }
 
