@@ -38,9 +38,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
   private $comments;
 
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
+  private $tricks;
+
+  #[ORM\OneToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
+  private $pictureProfile;
+
   public function __construct()
   {
       $this->comments = new ArrayCollection();
+      $this->tricks = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -199,6 +206,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
               $comment->setUser(null);
           }
       }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection<int, Trick>
+   */
+  public function getTricks(): Collection
+  {
+      return $this->tricks;
+  }
+
+  public function addTrick(Trick $trick): self
+  {
+      if (!$this->tricks->contains($trick)) {
+          $this->tricks[] = $trick;
+          $trick->setUser($this);
+      }
+
+      return $this;
+  }
+
+  public function removeTrick(Trick $trick): self
+  {
+      if ($this->tricks->removeElement($trick)) {
+          // set the owning side to null (unless already changed)
+          if ($trick->getUser() === $this) {
+              $trick->setUser(null);
+          }
+      }
+
+      return $this;
+  }
+
+  public function getPictureProfile(): ?Picture
+  {
+      return $this->pictureProfile;
+  }
+
+  public function setPictureProfile(?Picture $pictureProfile): self
+  {
+      $this->pictureProfile = $pictureProfile;
 
       return $this;
   }

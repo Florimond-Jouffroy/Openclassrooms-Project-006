@@ -1,0 +1,26 @@
+{% use 'bootstrap_5_layout.html.twig' %}
+
+
+{% block file_widget %}
+
+	{% if form.parent.vars.file_url is defined and form.parent.vars.file_url is not null %}
+
+		<div class="card position-relative mb-3">
+			<img class="card-img" src="{{ asset(form.parent.vars.file_url) }}" alt="">
+			<input type="hidden" name="{{ field_name(form) }}">
+
+			<div class="card-body">{{- block('form_widget') -}}</div>
+
+		</div>
+
+	{% else %}
+		{{- block('form_widget') -}}
+		<p class="my-3">
+			<button type="button" class="btn btn-danger delete-picture-btn">
+				<i class="bi bi-trash"></i>
+			</button>
+		</p>
+	{% endif %}
+
+
+{% endblock %}

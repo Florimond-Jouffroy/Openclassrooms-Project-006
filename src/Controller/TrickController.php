@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\ArrayCollection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -32,6 +33,7 @@ class TrickController extends AbstractController
 
 
   #[Route('/trick/new', name: 'trick_new')]
+  #[IsGranted('ROLE_USER')]
   public function new(Request $request)
   {
     $trick = new Trick();
@@ -42,7 +44,7 @@ class TrickController extends AbstractController
     if ($form->isSubmitted() && $form->isValid()) {
 
       $trick->setSlug($this->sluger->slug($trick->getName()));
-
+      $trick->setUser($this->getUser());
 
       foreach ($trick->getPictures() as $picture) {
 
@@ -117,8 +119,14 @@ class TrickController extends AbstractController
 
 
   #[Route('/trick/{id}/edit', name: 'trick_edit')]
+  #[IsGranted('ROLE_USER')]
   public function edit(Trick $trick, Request $request)
   {
+
+    if ($trick->getUser() !== $this->getUser()) {
+      return $this->redirectToRoute('home');
+    }
+
 
     $originalPictures = new ArrayCollection();
     $originalVideos = new ArrayCollection();
@@ -189,6 +197,7 @@ class TrickController extends AbstractController
   }
 
   #[Route('/trick/{id}/delete', name: 'trick_delete')]
+  #[IsGranted('ROLE_USER')]
   public function delete(Trick $trick)
   {
 
