@@ -178,40 +178,40 @@ class Trick
    */
   public function getComments(): Collection
   {
-      return $this->comments;
+    return $this->comments;
   }
 
   public function addComment(Comment $comment): self
   {
-      if (!$this->comments->contains($comment)) {
-          $this->comments[] = $comment;
-          $comment->setTrick($this);
-      }
+    if (!$this->comments->contains($comment)) {
+      $this->comments[] = $comment;
+      $comment->setTrick($this);
+    }
 
-      return $this;
+    return $this;
   }
 
   public function removeComment(Comment $comment): self
   {
-      if ($this->comments->removeElement($comment)) {
-          // set the owning side to null (unless already changed)
-          if ($comment->getTrick() === $this) {
-              $comment->setTrick(null);
-          }
+    if ($this->comments->removeElement($comment)) {
+      // set the owning side to null (unless already changed)
+      if ($comment->getTrick() === $this) {
+        $comment->setTrick(null);
       }
+    }
 
-      return $this;
+    return $this;
   }
 
   public function getUser(): ?User
   {
-      return $this->user;
+    return $this->user;
   }
 
   public function setUser(?User $user): self
   {
-      $this->user = $user;
+    $this->user = $user;
 
-      return $this;
+    return $this;
   }
 }

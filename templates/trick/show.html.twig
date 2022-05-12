@@ -11,14 +11,24 @@
 		<div class="trickHeader">
 
 			{% if app.user %}
-				<div class="trickHeader__options">
-					<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
-						<i class="bi bi-pencil-fill"></i>
-					</a>
-					<a href="{{path('trick_delete', {id:trick.id})}}" class="btn btn-primary mx-1">
-						<i class="bi bi-trash-fill"></i>
-					</a>
-				</div>
+
+				{% for label, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="alert alert-{{ label }}">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endfor %}
+				{% if app.user == trick.user %}
+					<div class="trickHeader__options">
+						<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
+							<i class="bi bi-pencil-fill"></i>
+						</a>
+						<a href="{{path('trick_delete', {id:trick.id})}}" class="btn btn-primary mx-1">
+							<i class="bi bi-trash-fill"></i>
+						</a>
+					</div>
+				{% endif %}
 			{% endif %}
 
 			{% if trick.mainPicture  %}
