@@ -23,9 +23,7 @@ class PictureType extends AbstractType
       ->add('file', FileType::class, [
         'label' => false,
         'required' => false,
-        'constraints' => [
-          new Assert\NotBlank(message: "Vous devez uploader une image.")
-        ]
+        'constraints' => []
       ]);
 
     $builder->setEmptyData(new Picture($this->picturesUploadDirectory));

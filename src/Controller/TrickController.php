@@ -2,19 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\Trick;
-use App\Form\Trick\CommentType;
+use App\Entity\Comment;
 use App\Form\Trick\TrickType;
+use App\Form\Trick\CommentType;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\ArrayCollection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TrickController extends AbstractController
 {
@@ -62,6 +63,11 @@ class TrickController extends AbstractController
       $this->em->persist($trick);
       $this->em->flush();
 
+      $this->addFlash(
+        'success',
+        'Your trick were added!'
+      );
+
       return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
     }
 
@@ -103,6 +109,11 @@ class TrickController extends AbstractController
       $this->em->persist($comment);
       $this->em->flush();
 
+      $this->addFlash(
+        'success',
+        'Your comment were added!'
+      );
+
       return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
     }
 
@@ -124,6 +135,11 @@ class TrickController extends AbstractController
   {
 
     if ($trick->getUser() !== $this->getUser()) {
+
+      $this->addFlash(
+        'danger',
+        'You haven\'t the rights!!'
+      );
       return $this->redirectToRoute('home');
     }
 
@@ -186,6 +202,10 @@ class TrickController extends AbstractController
 
 
       $this->em->flush();
+      $this->addFlash(
+        'success',
+        'Your changes were saved!'
+      );
 
       return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
     }
@@ -200,9 +220,28 @@ class TrickController extends AbstractController
   #[IsGranted('ROLE_USER')]
   public function delete(Trick $trick)
   {
+    if (null === $trick) {
+      throw new NotFoundHttpException('Trick not found !');
+    }
 
-    $this->em->remove($trick);
-    $this->em->flush();
+    if ($this->getUser() === $user = $trick->getUser()) {
+
+      foreach ($trick->getPictures() as $picture) {
+        $this->em->remove($picture);
+      }
+
+      $this->em->flush();
+
+      $this->em->remove($trick);
+      $this->em->flush();
+
+      $this->addFlash(
+        'success',
+        'Your trick were Deleted!'
+      );
+
+      return $this->redirectToRoute('home');
+    }
 
     return $this->redirectToRoute('home');
   }

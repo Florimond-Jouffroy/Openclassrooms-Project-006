@@ -6,6 +6,15 @@
 
 {% block body %}
 
+	{% for label, messages in app.flashes %}
+		{% for message in messages %}
+
+			<div class="container mt-3 alert alert-{{ label }}">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endfor %}
+
 	<div class="container-fluid d-flex flex-column" id="hero">
 
 		<div class="h-75 d-flex align-items-center justify-content-center">

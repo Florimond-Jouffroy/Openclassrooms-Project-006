@@ -22,7 +22,7 @@ class Picture
   private $name;
 
   #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'pictures')]
-  private Trick $trick;
+  private $trick;
 
   private ?UploadedFile $file = null;
 
@@ -117,6 +117,7 @@ class Picture
   #[ORM\PostRemove()]
   public function onDelete()
   {
+
     unlink($this->filepath);
   }
 }
