@@ -31,7 +31,11 @@
 
 <div class="mt-5">
 	<button type="submit" class="btn btn-primary">Enregistrer</button>
-	<a href="{{ path('home') }}" class="btn btn-dark mx-2">Annuler</a>
+	{% if is_granted('ROLE_ADMIN') == false %}
+		<a href="{{ path('home') }}" class="btn btn-dark mx-2">Annuler</a>
+	{% else %}
+		<a href="{{ path('admin_tricks') }}" class="btn btn-dark mx-2">Annuler</a>
+	{% endif %}
 </div>
 
 {{ form_end(form) }}

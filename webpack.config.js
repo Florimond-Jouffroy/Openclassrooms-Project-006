@@ -24,6 +24,7 @@ Encore
   .addEntry('collectionPictures', './assets/js/collectionPictures.js')
   .addEntry('collectionVideos', './assets/js/collectionVideos.js')
 
+
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge('./assets/controllers.json')
 

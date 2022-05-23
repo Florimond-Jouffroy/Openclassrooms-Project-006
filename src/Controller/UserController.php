@@ -54,6 +54,8 @@ class UserController extends AbstractController
       $this->em->flush();
     }
 
+
+
     return $this->render('user/profile.html.twig', [
       'form' => $form->createView(),
       'formPicture' => $formPicture->createView(),
