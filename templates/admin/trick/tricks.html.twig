@@ -47,9 +47,9 @@
 						<a href="{{path('admin_trick_edit', {'id':trick.id})}}" type="button" class="btn btn-success">
 							<i class="bi bi-pencil-square"></i>
 						</a>
-						<button type="button" class="btn btn-danger">
+						<a href="{{path('admin_trick_delete', {'id':trick.id})}}" type="button" class="btn btn-danger">
 							<i class="bi bi-trash"></i>
-						</button>
+						</a>
 					</td>
 				</tr>
 			{% endfor %}

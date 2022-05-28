@@ -1,0 +1,40 @@
+<table class="table">
+	<caption>Liste des commentaires
+	</caption>
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Created At</th>
+			<th scope="col">Content</th>
+			<th scope="col">User</th>
+
+			<th scope="col">Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for comment in comments %}
+			<tr>
+				<td>{{loop.index}}</td>
+				<td>{{comment.createdAt | date("d/m/Y")}}</td>
+				<td>{{comment.content}}</td>
+				<td>{{comment.user.fullName}}</td>
+
+				<td>
+					<a href="{{path('admin_trick_show', {'id':comment.trick.id})}}#comments" type="button" class="btn btn-primary">
+						<i class="bi bi-eye"></i>
+					</a>
+					<a href="{{path('admin_comment_validChange', {'id':comment.id})}}#comments" type="button" class="btn btn-warning">
+						<i class="bi bi-exclamation-triangle-fill"></i>
+					</a>
+
+					<a href="{{path('admin_comment_delete', {'id':comment.id})}}" type="button" class="btn btn-danger">
+						<i class="bi bi-trash"></i>
+					</a>
+				</td>
+			</tr>
+
+		{% endfor %}
+
+
+	</tbody>
+</table>

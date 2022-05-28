@@ -31,10 +31,10 @@
 
 <div class="mt-5">
 	<button type="submit" class="btn btn-primary">Enregistrer</button>
-	{% if is_granted('ROLE_ADMIN') == false %}
-		<a href="{{ path('home') }}" class="btn btn-dark mx-2">Annuler</a>
-	{% else %}
+	{% if current is defined and current == 'tricks' %}
 		<a href="{{ path('admin_tricks') }}" class="btn btn-dark mx-2">Annuler</a>
+	{% else %}
+		<a href="{{ path('home') }}" class="btn btn-dark mx-2">Annuler</a>
 	{% endif %}
 </div>
 

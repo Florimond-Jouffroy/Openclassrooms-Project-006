@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace  App\Controller\User\Password;
 
-use App\Form\LoginType;
-use App\Form\EmailRequestType;
 use App\Service\MailerService;
 use App\Entity\PasswordRequest;
-use App\Form\PasswordRequestType;
 use App\Repository\UserRepository;
 use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,11 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
-class LoginController extends AbstractController
+class ForgotController extends AbstractController
 {
 
   private $userRepository, $passwordRequestRepository, $em, $mailer, $passwordHasher;
@@ -38,23 +34,6 @@ class LoginController extends AbstractController
     $this->passwordHasher = $userPasswordHasher;
   }
 
-
-  #[Route('/login', name: 'user_login')]
-  public function login(AuthenticationUtils $authenticationUtils)
-  {
-    $form = $this->createForm(LoginType::class, ['email' => $authenticationUtils->getLastUsername()]);
-
-    return $this->render('user/login.html.twig', [
-      'form' => $form->createView(),
-      'error' => $authenticationUtils->getLastAuthenticationError()
-    ]);
-  }
-
-
-  #[Route('/logout', name: 'user_logout')]
-  public function logout()
-  {
-  }
 
 
   #[Route('/forgot-password', name: 'user_forgotPassword')]
@@ -109,38 +88,6 @@ class LoginController extends AbstractController
     }
 
     return $this->render('user/password/emailRequest.html.twig', [
-      'form' => $form->createView()
-    ]);
-  }
-
-
-  #[Route('/reset-password/{token}', name: "user_resetPassword")]
-  public function resetPassword(Request $request, string $token)
-  {
-    $passwordRequest = $this->passwordRequestRepository->findOneBy(['token' => $token]);
-
-    $form = $this->createForm(PasswordRequestType::class);
-    $form->handleRequest($request);
-
-    if ($passwordRequest === null) {
-      return $this->redirectToRoute('home');
-    }
-
-    if ($form->isSubmitted() && $form->isValid()) {
-
-      $newPassword = $form->getData('password');
-      $user = $this->userRepository->findOneBy(['email' => $passwordRequest->getEmail()]);
-
-      $user->setPassword($this->passwordHasher->hashPassword($user, $newPassword['password']));
-
-      $this->em->persist($user);
-      $this->em->remove($passwordRequest);
-      $this->em->flush();
-
-      return $this->redirectToRoute('home');
-    }
-
-    return $this->render('user/password/passwordRequest.html.twig', [
       'form' => $form->createView()
     ]);
   }

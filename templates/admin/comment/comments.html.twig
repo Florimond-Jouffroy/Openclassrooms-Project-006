@@ -3,42 +3,31 @@
 
 {% block body %}
 
-	<table class="table">
-		<caption>Liste des commentaires
-		</caption>
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col">Created At</th>
-				<th scope="col">Content</th>
-				<th scope="col">User</th>
-				<th scope="col">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for comment in comments %}
-				<tr>
-					<td>{{loop.index}}</td>
-					<td>{{comment.createdAt | date("d/m/Y")}}</td>
-					<td>{{comment.content}}</td>
-					<td>{{comment.user.firstname}}
-						{{comment.user.lastname}}</td>
-					<td>
-						<a href="{{path('admin_trick_show', {'id':comment.trick.id})}}#comments" type="button" class="btn btn-primary">
-							<i class="bi bi-eye"></i>
-						</a>
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" data-bs-toggle="tab" href="#menu1">Comments Valide<span class="badge rounded-pill bg-secondary ms-2"></span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-bs-toggle="tab" href="#menu2">Comments No Valid<span class="badge rounded-pill bg-secondary ms-2"></span>
+			</a>
+		</li>
+	</ul>
 
-						<a href="{{path('admin_comment_delete', {'id':comment.id})}}" type="button" class="btn btn-danger">
-							<i class="bi bi-trash"></i>
-						</a>
-					</td>
-				</tr>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane container active" id="menu1">
 
-			{% endfor %}
+			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: commentsV} only %}
 
+		</div>
 
-		</tbody>
-	</table>
+		<div class="tab-pane container fade" id="menu2">
 
+			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: commentsNV} only %}
+
+		</div>
+
+	</div>
 
 {% endblock %}

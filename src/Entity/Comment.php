@@ -28,6 +28,9 @@ class Comment
   #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
   private $user;
 
+  #[ORM\Column(type: 'integer')]
+  private $valid = 0;
+
   public function getId(): ?int
   {
     return $this->id;
@@ -65,6 +68,18 @@ class Comment
   public function setUser(?User $user): self
   {
     $this->user = $user;
+
+    return $this;
+  }
+
+  public function getValid()
+  {
+    return $this->valid;
+  }
+
+  public function setValid($valid): self
+  {
+    $this->valid = $valid;
 
     return $this;
   }

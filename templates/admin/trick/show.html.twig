@@ -36,66 +36,8 @@
 
 	</div>
 
-	<div class="mt-3">
-		<h1 class="text-uppercase">{{trick.name}}</h1>
-		<h4>
-			Catégorie :
-			{% if trick.category %}
-				{{trick.category.name}}
-			{% else %}
-				unknow
-			{% endif %}
-		</h4>
 
-		<ul class="list-inline">
-			{% if trick.user %}
-				<li class="list-inline-item">
-
-					Par :
-					{{trick.user.firstname}}</li>
-				|
-			{% endif %}
-			<li class="list-inline-item">
-				Ajouté le
-				{{trick.createdAt | date("d/m/Y")}}
-				(Mise a jour le :
-				{{trick.updatedAt| date("d/m/Y")}})
-			</li>
-			|
-			<li class="list-inline-item">
-				<a href="#comments">{{trick.comments.count}}
-					commentaires</a>
-			</li>
-		</ul>
-	</div>
-
-
-	<div class=" mb-4 mt-5 p-3 bg-light rounded-3">
-		{{trick.description}}
-	</div>
-
-
-	<div class="trickMedias">
-		{% for picture in trick.pictures %}
-
-			<img src="{{asset('pictures/' ~ picture.name)}}" alt="" class="trickMedias__picture">
-
-		{% endfor %}
-
-		{% for video in trick.videos %}
-			<iframe class="trickMedias__video" frameborder="0" type="text/html" src="{{ video.link }}" width="300" height="200" allowfullscreen></iframe>
-		{% endfor %}
-	</div>
-
-
-	<div class="text-center">
-		<a href="#" id="loadMedia" class="d-md-block d-lg-none">
-			<button class="btn btn-outline-secondary">Afficher les médias</button>
-		</a>
-		<a href="#" id="hideMedia" class="d-md-none d-lg-none d-none">
-			<button class="btn btn-outline-secondary mt-3">Masquer les médias</button>
-		</a>
-	</div>
+	{% include "trick/_parts/_show_trick.html.twig" %}
 
 
 	<div class="my-3 p-3 bg-body rounded shadow-sm" id="comments">
@@ -110,11 +52,16 @@
 				<img src="{{asset('pictures/' ~ comment.user.pictureProfile.name)}}" alt="mdo" width="32" height="32" class="bd-placeholder-img flex-shrink-0 me-2 rounded">
 
 				<p class="pb-3 mb-0 small lh-sm border-bottom w-100">
-					<strong class="d-block text-gray-dark pb-1">@{{comment.user.firstname}}
-						{{comment.user.lastname}}
+					<strong class="d-block text-gray-dark pb-1">@{{comment.user.fullName}}
 						-
 						{{comment.updatedAt| date("d/m/Y")}}</strong>
-					{{comment.content}}
+					{% if comment.valid == 1 %}
+						<i class="text-danger">Commentaire non valide :
+							{{comment.content}}</i>
+					{% else %}
+						{{comment.content}}
+					{% endif %}
+
 				</p>
 			</div>
 		{% endfor %}

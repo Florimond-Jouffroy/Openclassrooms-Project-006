@@ -12,9 +12,6 @@ class IndexController extends AbstractController
   #[Route('/admin', name: 'admin_index')]
   public function index()
   {
-
-
-
     return $this->render('admin/index.html.twig', [
       'current' => "index"
     ]);

@@ -65,9 +65,9 @@
 							<button type="button" class="btn btn-success">
 								<i class="bi bi-pencil-square"></i>
 							</button>
-							<button type="button" class="btn btn-danger">
+							<a href="{{path('admin_user_delete', {'id':user.id})}}" type="button" class="btn btn-danger">
 								<i class="bi bi-trash"></i>
-							</button>
+							</a>
 						</td>
 					</tr>
 				{% endfor %}
