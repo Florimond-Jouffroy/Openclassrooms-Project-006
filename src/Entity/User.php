@@ -2,16 +2,21 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use App\Entity\Traits\TimeStampableTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+  use TimeStampableTrait;
+
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column(type: 'integer')]
@@ -41,13 +46,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
   private $tricks;
 
-  #[ORM\OneToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
+  #[ORM\ManyToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
   private $pictureProfile;
 
   public function __construct()
   {
-      $this->comments = new ArrayCollection();
-      $this->tricks = new ArrayCollection();
+    $this->comments = new ArrayCollection();
+    $this->tricks = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -175,6 +180,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this;
   }
 
+  public function getFullName(): string
+  {
+    return $this->firstname . ' ' . $this->lastname;
+  }
+
   public function isAccountValidated(): bool
   {
     return ($this->getValidationToken() === null ? true : false);
@@ -185,29 +195,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
    */
   public function getComments(): Collection
   {
-      return $this->comments;
+    return $this->comments;
   }
 
   public function addComment(Comment $comment): self
   {
-      if (!$this->comments->contains($comment)) {
-          $this->comments[] = $comment;
-          $comment->setUser($this);
-      }
+    if (!$this->comments->contains($comment)) {
+      $this->comments[] = $comment;
+      $comment->setUser($this);
+    }
 
-      return $this;
+    return $this;
   }
 
   public function removeComment(Comment $comment): self
   {
-      if ($this->comments->removeElement($comment)) {
-          // set the owning side to null (unless already changed)
-          if ($comment->getUser() === $this) {
-              $comment->setUser(null);
-          }
+    if ($this->comments->removeElement($comment)) {
+      // set the owning side to null (unless already changed)
+      if ($comment->getUser() === $this) {
+        $comment->setUser(null);
       }
+    }
 
-      return $this;
+    return $this;
   }
 
   /**
@@ -215,40 +225,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
    */
   public function getTricks(): Collection
   {
-      return $this->tricks;
+    return $this->tricks;
   }
 
   public function addTrick(Trick $trick): self
   {
-      if (!$this->tricks->contains($trick)) {
-          $this->tricks[] = $trick;
-          $trick->setUser($this);
-      }
+    if (!$this->tricks->contains($trick)) {
+      $this->tricks[] = $trick;
+      $trick->setUser($this);
+    }
 
-      return $this;
+    return $this;
   }
 
   public function removeTrick(Trick $trick): self
   {
-      if ($this->tricks->removeElement($trick)) {
-          // set the owning side to null (unless already changed)
-          if ($trick->getUser() === $this) {
-              $trick->setUser(null);
-          }
+    if ($this->tricks->removeElement($trick)) {
+      // set the owning side to null (unless already changed)
+      if ($trick->getUser() === $this) {
+        $trick->setUser(null);
       }
+    }
 
-      return $this;
+    return $this;
   }
 
   public function getPictureProfile(): ?Picture
   {
-      return $this->pictureProfile;
+    return $this->pictureProfile;
   }
 
   public function setPictureProfile(?Picture $pictureProfile): self
   {
-      $this->pictureProfile = $pictureProfile;
+    $this->pictureProfile = $pictureProfile;
 
-      return $this;
+    return $this;
+  }
+
+  public function isAdmin()
+  {
+    return in_array('ROLE_ADMIN', $this->roles);
   }
 }

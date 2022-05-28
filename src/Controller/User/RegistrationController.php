@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
-use App\Repository\UserRepository;
 use App\Service\MailerService;
+use App\Repository\UserRepository;
 use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
-class RegisterController extends AbstractController
+class RegistrationController extends AbstractController
 {
   private $passwordHasher, $em, $mailer, $userRepository;
   public function __construct(
@@ -36,8 +34,7 @@ class RegisterController extends AbstractController
   public function register(Request $request, TokenGeneratorInterface $tokenGenerator)
   {
 
-    $user = new User;
-    $form = $this->createForm(RegistrationType::class, $user);
+    $form = $this->createForm(RegistrationType::class, $user = new User);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
@@ -45,8 +42,11 @@ class RegisterController extends AbstractController
       $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
       $user->setValidationToken($tokenGenerator->generateToken());
 
-      $url = $this->generateUrl('user_validation', ['token' => $user->getValidationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
-
+      $url = $this->generateUrl(
+        'user_validation',
+        ['token' => $user->getValidationToken()],
+        UrlGeneratorInterface::ABSOLUTE_URL
+      );
 
       $emailParameters = array(
         'from' => 'noreply@snowtrick.com',
@@ -71,6 +71,7 @@ class RegisterController extends AbstractController
     ]);
   }
 
+
   #[Route('/user/validation/{token}', name: 'user_validation')]
   public function validateAccount($token)
   {
@@ -78,7 +79,6 @@ class RegisterController extends AbstractController
 
     if ($user !== null) {
       $user->setValidationToken(null);
-      $this->em->persist($user);
       $this->em->flush();
     }
 

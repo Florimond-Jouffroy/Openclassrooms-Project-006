@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}Dashboard Admin!
 			{% endblock %}
 		</title>
 		<link
@@ -20,7 +20,14 @@
 		{% endblock %}
 	</head>
 	<body>
-		{% include 'partials/_navbar.html.twig' %}
-		{% block body %}{% endblock %}
-	</body>
-</html>
+		<div class="container-fluid">
+			<div class="row">
+				{% include 'admin/_parts/_navbar.html.twig' %}
+				<div class="col-10 offset-2 p-4"> {% block body %}{% endblock %}
+					</div>
+				</div>
+
+			</div>
+		</body>
+	</html>
+</body></html>

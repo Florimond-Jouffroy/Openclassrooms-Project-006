@@ -214,4 +214,9 @@ class Trick
 
     return $this;
   }
+
+  public function isHis(User $user)
+  {
+    return ($user === $this->getUser()) ? true : false;
+  }
 }

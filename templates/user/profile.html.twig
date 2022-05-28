@@ -81,7 +81,7 @@
 							<td>
 								<a href="{{path('trick_show', {'id': trick.id})}}">{{trick.name}}</a>
 							</td>
-							<td>{{trick.category}}</td>
+							<td>{{trick.category.name}}</td>
 							<td>{{trick.comments.count}}</td>
 							<td>
 								<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">

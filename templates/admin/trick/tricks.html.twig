@@ -1,0 +1,62 @@
+{% extends "admin/base.html.twig" %}
+
+
+{% block body %}
+
+	<div class="mb-2">
+
+		<a type="button" href="{{path('admin_trick_new')}}" class="btn btn-primary">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus" viewbox="0 0 16 16">
+				<path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z"/>
+				<path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+			</svg>
+			Add
+		</a>
+
+	</div>
+
+	<table class="table">
+		<caption>Liste des Tricks
+		</caption>
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Pictures</th>
+				<th scope="col">Videos</th>
+				<th scope="col">Comments</th>
+				<th scope="col">Created At</th>
+				<th scope="col">Updated At</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for trick in tricks %}
+				<tr>
+					<th scope="row">{{loop.index}}</th>
+					<td>{{trick.name}}</td>
+					<td>{{trick.pictures.count}}</td>
+					<td>{{trick.videos.count}}</td>
+					<td>{{trick.comments.count}}</td>
+					<td>{{trick.createdAt | date("d/m/Y")}}</td>
+					<td>{{trick.updatedAt | date("d/m/Y")}}</td>
+					<td>
+						<a href="{{path('admin_trick_show', {'id':trick.id})}}" type="button" class="btn btn-primary">
+							<i class="bi bi-eye"></i>
+						</a>
+						<a href="{{path('admin_trick_edit', {'id':trick.id})}}" type="button" class="btn btn-success">
+							<i class="bi bi-pencil-square"></i>
+						</a>
+						<a href="{{path('admin_trick_delete', {'id':trick.id})}}" type="button" class="btn btn-danger">
+							<i class="bi bi-trash"></i>
+						</a>
+					</td>
+				</tr>
+			{% endfor %}
+
+
+		</tbody>
+	</table>
+
+
+{% endblock %}

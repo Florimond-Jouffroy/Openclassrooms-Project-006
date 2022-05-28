@@ -1,5 +1,5 @@
 @import "globals.scss";
-
+@import "admin.scss";
 
 
 * {
@@ -47,8 +47,15 @@
 
   display: flex;
   flex-direction: row;
-
   flex-wrap: wrap;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+
+    display: none;
+
+  }
 
   &__picture {
 
@@ -57,9 +64,15 @@
     object-fit: cover;
 
     border-radius: 5px;
-    margin-right: 1em;
+    margin: 1em;
 
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+      margin: 0;
+      margin-bottom: 1em;
+    }
 
   }
 
