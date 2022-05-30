@@ -24,9 +24,9 @@ Array.from(document.getElementsByClassName("delete-picture-btn")).forEach(el => 
 Array.from(document.getElementsByClassName("add-picture-btn")).forEach((el) => {
   el.addEventListener("click", () => {
 
-    let target = document.getElementById(el.getAttribute('data-target'));
+    let target = document.getElementById(el.getAttribute("data-target"));
 
-    let newEl = document.createElement('div');
+    let newEl = document.createElement("div");
 
     newEl.innerHTML = target.getAttribute("data-prototype").replace(/__name__label__/g, `Fichier ${target.childElementCount + 1}`).replace(/__name__/g, target.childElementCount + 1);
     newEl = newEl.firstChild;
