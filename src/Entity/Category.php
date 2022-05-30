@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trick;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CategoryRepository;
 use App\Entity\Traits\TimeStampableTrait;
@@ -22,13 +23,13 @@ class Category
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column(type: 'integer')]
-  private $id;
+  private int $id;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $name;
+  private string $name;
 
   #[ORM\OneToMany(mappedBy: 'category', targetEntity: Trick::class)]
-  private $tricks;
+  private Collection $tricks;
 
   public function __construct()
   {

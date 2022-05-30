@@ -15,10 +15,10 @@ trait TimeStampableTrait
 {
 
   #[ORM\Column(type: "datetime")]
-  private $createdAt;
+  private DateTime $createdAt;
 
   #[ORM\Column(type: "datetime")]
-  private $updatedAt;
+  private Datetime $updatedAt;
 
   /**
    * @return DateTimeInterface|null

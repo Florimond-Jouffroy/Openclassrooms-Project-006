@@ -17,13 +17,13 @@ class PasswordRequest
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column(type: 'integer')]
-  private $id;
+  private int $id;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $email;
+  private string $email;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $token;
+  private string $token;
 
   public function getId(): ?int
   {

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trick;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PictureRepository;
 use App\Entity\Traits\TimeStampableTrait;
@@ -16,18 +17,18 @@ class Picture
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column(type: 'integer')]
-  private $id;
+  private int $id;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $name;
+  private  string $name;
 
   #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'pictures')]
-  private $trick;
+  private ?Trick $trick;
 
   private ?UploadedFile $file = null;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $filepath;
+  private string $filepath;
 
   public function __construct(private string $pictureUploadDirectory)
   {
