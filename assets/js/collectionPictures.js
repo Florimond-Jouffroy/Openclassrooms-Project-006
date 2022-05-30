@@ -6,7 +6,7 @@ const getClosest = (elem, selector) => {
 }
 
 const applyRemovePictureButtonEvent = pictureButtonElt => {
-  pictureButtonElt.addEventListener("click", e => {
+  pictureButtonElt.addEventListener("click", (e) => {
     let container = getClosest(e.target, "fieldset");
 
     if (container !== null) {
@@ -21,8 +21,8 @@ Array.from(document.getElementsByClassName("delete-picture-btn")).forEach(el => 
 
 // Ont ajout un evenement sur le bouton add picture
 // pour qu'il aille chercher le prototype est le stock dans une div que l'on créer
-Array.from(document.getElementsByClassName("add-picture-btn")).forEach(el => {
-  el.addEventListener("click", e => {
+Array.from(document.getElementsByClassName("add-picture-btn")).forEach((el) => {
+  el.addEventListener("click", () => {
 
     let target = document.getElementById(el.getAttribute('data-target'));
 
