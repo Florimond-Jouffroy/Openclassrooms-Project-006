@@ -1,23 +1,23 @@
 const getClosest = (elem, selector) => {
   for (; elem && elem !== window; elem = elem.parentNode) {
-    if (elem.matches(selector)) return elem
+    if (elem.matches(selector)) return elem;
   }
-  return null
+  return null;
 }
 
 const applyRemoveVideoButtonEvent = videoButtonElt => {
   videoButtonElt.addEventListener('click', e => {
-    let container = getClosest(e.target, 'fieldset')
+    let container = getClosest(e.target, 'fieldset');
 
     if (container !== null) {
-      container.remove()
+      container.remove();
     }
-  })
+  });
 }
 
 Array.from(document.getElementsByClassName('delete-video-btn')).forEach(el => {
-  applyRemoveVideoButtonEvent(el)
-})
+  applyRemoveVideoButtonEvent(el);
+});
 
 // Ont ajout un evenement sur le bouton add video
 // pour qu'il aille chercher le prototype est le stock dans une div que l'on créer
@@ -32,10 +32,10 @@ Array.from(document.getElementsByClassName('add-video-btn')).forEach(el => {
     newEl = newEl.firstChild;
 
     Array.from(newEl.getElementsByClassName('delete-video-btn')).forEach(el => {
-      applyRemoveVideoButtonEvent(el)
-    })
+      applyRemoveVideoButtonEvent(el);
+    });
 
     target.appendChild(newEl);
 
-  })
-})
+  });
+});
