@@ -9,7 +9,12 @@
 	<div class="container">
 
 
-		<h1>Edit Trick</h1>
+		<h1 class="mt-4 text-primary">
+			{% if trick.id is not null %}Edit Trick
+				{% else %}New Trick
+			{% endif %}
+
+		</h1>
 
 		{% include 'trick/_parts/form_trick.html.twig' with {form: form} only %}
 

@@ -22,16 +22,16 @@
 		</div>
 
 
-		<a href="#" class="mt-auto align-self-end mb-5">
-			<i class="bi bi-arrow-down-square-fill" style="font-size: 2rem; color: cornflowerblue;"></i>
+		<a href="#tricks" class="mt-auto align-self-end mb-5">
+			<i class="bi bi-arrow-down-square-fill" style="font-size: 2rem; color: #D8E6F2;"></i>
 		</a>
 
 
 	</div>
 
-	<div class="container">
+	<div class="container mb-5">
 
-		<div class="d-flex flex-wrap justify-content-center">
+		<div class="d-flex flex-wrap justify-content-center" id="tricks">
 			{%  for trick in tricks %}
 
 				{% include "trick/_parts/_trick.html.twig" with {"trick": trick} %}

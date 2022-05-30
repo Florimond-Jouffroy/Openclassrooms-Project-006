@@ -41,17 +41,17 @@
 
 
 		{% if app.user %}
-			<div class="my-3 p-3 bg-body rounded shadow-sm ">
+			<div class="my-3 p-3 bg-body rounded">
 				{{ form_start(form) }}
 				{{ form_row(form.content)}}
-				<div class="mt-5">
-					<button type="submit" class="btn btn-primary">Envoyer</button>
-				</div>
+
+				<button type="submit" class="btn btn-primary col-12 col-lg-1 mt-2">Envoyer</button>
+
 				{{ form_end(form) }}
 			</div>
 		{% endif %}
 
-		<div class="my-3 p-3 bg-body rounded shadow-sm" id="comments">
+		<div class="my-3 p-3 bg-body rounded" id="comments">
 			<h6 class="border-bottom pb-2 mb-0">Commentaires récents</h6>
 			{% if trick.comments.count == 0 %}
 				<p>Aucun commentaires pour l'instant !</p>
@@ -80,13 +80,15 @@
 				<nav aria-label="..." class="pt-5">
 					<ul class="pagination pagination-sm justify-content-center">
 
-						{% for i in 1..nbPages %}
+						{% if nbPages > 1 %}
 
-							<li class="{% if currentPage == loop.index %}disabled{% endif %} page-item">
-								<a class="page-link" href="{{ path('trick_show', {'id': trick.id, 'page': loop.index }) }}#comments">{{ loop.index }}</a>
-							</li>
-						{% endfor %}
+							{% for i in 1..nbPages %}
 
+								<li class="{% if currentPage == loop.index %}disabled{% endif %} page-item mb-5">
+									<a class="page-link" href="{{ path('trick_show', {'slug': trick.slug, 'page': loop.index }) }}#comments">{{ loop.index }}</a>
+								</li>
+							{% endfor %}
+						{% endif %}
 					</ul>
 				</nav>
 			{% endif %}

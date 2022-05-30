@@ -22,7 +22,7 @@ class ShowController extends AbstractController
   }
 
 
-  #[Route('/trick/{id}/{page<\d+>?1}', name: 'trick_show')]
+  #[Route('/trick/{slug}/{page<\d+>?1}', name: 'trick_show')]
   public function show(Trick $trick, Request $request, $page = 1)
   {
     $limit = 5;
@@ -52,7 +52,7 @@ class ShowController extends AbstractController
 
         $this->addFlash('success', 'Your comment were added!');
 
-        return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
+        return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
       }
     }
 
