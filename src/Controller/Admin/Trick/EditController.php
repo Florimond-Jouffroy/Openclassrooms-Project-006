@@ -8,7 +8,6 @@ use App\Service\TrickService;
 use App\Utils\PersistentCollectionTools;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EditController extends AbstractController
