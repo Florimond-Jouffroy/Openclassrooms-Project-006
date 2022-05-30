@@ -17,7 +17,7 @@ class Comment
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column(type: 'integer')]
-  private int $id;
+  private  $id;
 
   #[ORM\Column(type: 'text')]
   private string $content;

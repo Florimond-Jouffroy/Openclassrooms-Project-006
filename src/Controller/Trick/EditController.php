@@ -34,12 +34,11 @@ class EditController extends AbstractController
         $this->addFlash('danger', "You haven't the rights!!");
         return $this->redirectToRoute('home');
       }
-      $typeForm = 'edit';
+
       $originalPictures = PersistentCollectionTools::initializeCollection($trick->getPictures());
       $originalVideos = PersistentCollectionTools::initializeCollection($trick->getVideos());
     } else {
       $trick = new Trick();
-      $typeForm = 'new';
     }
 
     $form = $this->createForm(TrickType::class, $trick);
@@ -59,6 +58,6 @@ class EditController extends AbstractController
       return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
     }
 
-    return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'typeForm' => $typeForm]);
+    return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
   }
 }
