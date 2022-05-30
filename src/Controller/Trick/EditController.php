@@ -55,9 +55,9 @@ class EditController extends AbstractController
 
       $this->addFlash('success', 'Your changes were saved!');
 
-      return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
+      return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
     }
 
-    return $this->render('trick/edit.html.twig', ['form' => $form->createView()]);
+    return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
   }
 }

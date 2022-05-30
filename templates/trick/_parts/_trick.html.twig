@@ -15,7 +15,7 @@
 		</h6>
 		<div class="d-flex flex-row mt-3">
 
-			<a href="{{path('trick_show', {'id':trick.id}) }}" class="btn btn-outline-primary">En Lire plus</a>
+			<a href="{{path('trick_show', {'slug':trick.slug}) }}" class="btn btn-outline-primary">En Lire plus</a>
 
 			{% include 'trick/_parts/_options.html.twig' with {trick: trick} only %}
 		</div>

@@ -8,17 +8,17 @@
 
 {% block body %}
 	<div class="container">
-		<div class="row mt-5">
-			<div class="d-flex align-items-center justify-content-start  p-3 bg-white rounded shadow-sm mb-5">
+		<div class="mt-5">
+			<div class="d-flex align-items-center justify-content-start  p-3 bg-primary text-white rounded shadow-sm mb-5">
 				<img src="{{asset('pictures/' ~ user.pictureProfile.name)}}" alt="mdo" width="80" height="80" class="rounded-circle">
 				<h4 class="mx-5">{{user.firstname}}
 					{{user.lastname}}</h4>
 			</div>
 
 		</div>
-		<div class="row justify-content-between">
+		<div class="d-flex justify-content-between">
 
-			<div class="ml-1 p-3 bg-white rounded shadow-sm col-lg-6 col-md-12 ">
+			<div class="ml-1 p-3 bg-white rounded shadow-sm col-lg-6 col-md-12 border border-primary">
 
 				<h4>Paramètres du compte</h4>
 				{{form_start(form)}}
@@ -43,7 +43,7 @@
 			</div>
 
 
-			<div class="col-lg-5 d-flex flex-column align-items-center justify-content-center p-3 bg-white rounded shadow-sm col-md-12 ">
+			<div class="col-lg-5 d-flex flex-column align-items-center justify-content-center p-3 bg-white rounded shadow-sm col-md-12 border border-primary">
 
 
 				{{form_start(formPicture)}}
@@ -62,15 +62,15 @@
 		</div>
 
 
-		<div class="row table-responsive p-3 bg-white rounded shadow-sm mt-3">
+		<div class="d-flex flex-column table-responsive p-3 bg-white rounded shadow-sm mt-3 border border-primary">
 			<h4>Vos tricks</h4>
-			<table class="table">
+			<table class="table mb-5">
 				<thead>
 					<tr>
 						<th scope="col">#</th>
 						<th scope="col">Nom</th>
 						<th scope="col">Catégorie</th>
-						<th scope="col">Nb commentaires</th>
+						<th scope="col">Comments</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -79,12 +79,12 @@
 						<tr>
 							<th scope="row">{{loop.index}}</th>
 							<td>
-								<a href="{{path('trick_show', {'id': trick.id})}}">{{trick.name}}</a>
+								<a href="{{path('trick_show', {'slug': trick.slug})}}">{{trick.name}}</a>
 							</td>
 							<td>{{trick.category.name}}</td>
 							<td>{{trick.comments.count}}</td>
 							<td>
-								<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
+								<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary ">
 									<i class="bi bi-pencil-fill"></i>
 								</a>
 								<a href="{{path('trick_delete', {id:trick.id})}}" class="btn btn-primary mx-1">
@@ -100,4 +100,4 @@
 		</div>
 	</div>
 
-</div></div></div>{% endblock %}
+{% endblock %}

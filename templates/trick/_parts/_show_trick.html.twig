@@ -37,7 +37,7 @@
 </div>
 
 
-<div class="trickMedias">
+<div class="trickMedias" id="medias">
 	{% for picture in trick.pictures %}
 
 		<img src="{{asset('pictures/' ~ picture.name)}}" alt="" class="trickMedias__picture">
@@ -57,3 +57,9 @@
 		<button class="btn btn-outline-secondary mt-3">Masquer les médias</button>
 	</a>
 </div>
+
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('media') }}
+
+{% endblock %}
