@@ -1,1 +1,1 @@
-# Openclassrooms-Project-006
+# Openclassrooms-Project-006 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/be9c8e1b209e4dd1812959215d1124dd)](https://www.codacy.com/gh/Florimond-Jouffroy/Openclassrooms-Project-006/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Florimond-Jouffroy/Openclassrooms-Project-006&amp;utm_campaign=Badge_Grade)
