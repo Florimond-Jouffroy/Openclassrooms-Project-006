@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trick;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
 use App\Entity\Traits\TimeStampableTrait;
@@ -16,20 +17,19 @@ class Comment
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column(type: 'integer')]
-  private $id;
+  private  $id;
 
   #[ORM\Column(type: 'text')]
-  private $content;
+  private string $content;
 
   #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'comments')]
-  #[ORM\JoinColumn(nullable: false)]
-  private $trick;
+  private Trick $trick;
 
   #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
-  private $user;
+  private User $user;
 
   #[ORM\Column(type: 'integer')]
-  private $valid = 0;
+  private int $valid = 0;
 
   public function getId(): ?int
   {

@@ -14,7 +14,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\HasLifecycleCallbacks()]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
   use TimeStampableTrait;
 
   #[ORM\Id]
@@ -23,31 +22,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private $id;
 
   #[ORM\Column(type: 'string', length: 180, unique: true)]
-  private $email;
+  private string $email;
 
   #[ORM\Column(type: 'json')]
-  private $roles = [];
+  private array $roles = [];
 
   #[ORM\Column(type: 'string')]
-  private $password;
+  private string $password;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $firstname;
+  private string $firstname;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $lastname;
+  private string $lastname;
 
   #[ORM\Column(type: 'string', length: 255, nullable: true)]
-  private $validation_token;
+  private string $validation_token;
 
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
-  private $comments;
+  private Collection $comments;
 
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
-  private $tricks;
+  private Collection $tricks;
 
   #[ORM\ManyToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
-  private $pictureProfile;
+  private Picture $pictureProfile;
 
   public function __construct()
   {
