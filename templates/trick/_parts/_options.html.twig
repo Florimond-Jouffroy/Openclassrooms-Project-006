@@ -1,10 +1,12 @@
 {% if app.user %}
-	<div class="flex-grow-1 d-flex justify-content-end">
-		<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
-			<i class="bi bi-pencil-fill"></i>
-		</a>
-		<a href="{{path('trick_delete', {id:trick.id})}}" class="btn btn-primary mx-1">
-			<i class="bi bi-trash-fill"></i>
-		</a>
-	</div>
+	{% if app.user == trick.user %}
+		<div class="flex-grow-1 d-flex justify-content-end">
+			<a href="{{path('trick_edit', {id: trick.id})}}" class="btn btn-primary mx-1">
+				<i class="bi bi-pencil-fill"></i>
+			</a>
+			<a href="{{path('trick_delete', {id:trick.id})}}" class="btn btn-primary mx-1">
+				<i class="bi bi-trash-fill"></i>
+			</a>
+		</div>
+	{% endif %}
 {% endif %}

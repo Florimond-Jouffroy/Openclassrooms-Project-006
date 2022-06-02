@@ -1,0 +1,72 @@
+{% extends "admin/base.html.twig" %}
+
+
+{% block body %}
+
+	<div class="mb-2">
+
+		<a type="button" href="{{path('admin_tricks')}}" class="btn btn-primary">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-left" viewbox="0 0 16 16">
+				<path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5zM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5z"></path>
+			</svg>
+			Tricks
+		</a>
+
+		<a href="{{path('admin_trick_edit', {'id':trick.id})}}" type="button" class="btn btn-secondary ms-4">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewbox="0 0 16 16">
+				<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+				<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+			</svg>
+			Edit
+		</a>
+
+		<a href="#" type="button" class="btn btn-danger">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewbox="0 0 16 16">
+				<path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"></path>
+			</svg>
+			Delete
+		</a>
+	</div>
+	<div class="trickHeader">
+
+
+		{% if trick.mainPicture  %}
+			<img class="trickHeader__mainPicture" src="{{asset('pictures/' ~ trick.mainPicture.name)}}" alt="">
+		{% endif %}
+
+	</div>
+
+
+	{% include "trick/_parts/_show_trick.html.twig" %}
+
+
+	<div class="my-3 p-3 bg-body rounded shadow-sm" id="comments">
+		<h6 class="border-bottom pb-2 mb-0">Commentaires récents</h6>
+		{% if trick.comments.count == 0 %}
+			<p>Aucun commentaires pour l'instant !</p>
+		{% endif %}
+		{% for comment in trick.comments %}
+
+			<div class="d-flex text-muted pt-3">
+
+				<img src="{{asset('pictures/' ~ comment.user.pictureProfile.name)}}" alt="mdo" width="32" height="32" class="bd-placeholder-img flex-shrink-0 me-2 rounded">
+
+				<p class="pb-3 mb-0 small lh-sm border-bottom w-100">
+					<strong class="d-block text-gray-dark pb-1">@{{comment.user.fullName}}
+						-
+						{{comment.updatedAt| date("d/m/Y")}}</strong>
+					{% if comment.valid == 1 %}
+						<i class="text-danger">Commentaire non valide :
+							{{comment.content}}</i>
+					{% else %}
+						{{comment.content}}
+					{% endif %}
+
+				</p>
+			</div>
+		{% endfor %}
+
+
+	</div>
+
+{% endblock %}

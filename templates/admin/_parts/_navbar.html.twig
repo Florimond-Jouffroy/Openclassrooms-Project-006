@@ -1,0 +1,74 @@
+<div class="col-2 px-1 bg-dark position-fixed">
+	<div class="nav flex-column flex-nowrap vh-100 overflow-auto text-white p-2">
+		<a href="{{path('admin_index')}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-snow3 mx-1" viewbox="0 0 16 16">
+				<path d="M8 7.5a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1z"/>
+				<path d="M8 16a.5.5 0 0 1-.5-.5v-1.293l-.646.647a.5.5 0 0 1-.707-.708L7.5 12.793v-1.51l-2.053-1.232-1.348.778-.495 1.85a.5.5 0 1 1-.966-.26l.237-.882-1.12.646a.5.5 0 0 1-.5-.866l1.12-.646-.883-.237a.5.5 0 1 1 .258-.966l1.85.495L5 9.155v-2.31l-1.4-.808-1.85.495a.5.5 0 1 1-.259-.966l.884-.237-1.12-.646a.5.5 0 0 1 .5-.866l1.12.646-.237-.883a.5.5 0 1 1 .966-.258l.495 1.849 1.348.778L7.5 4.717v-1.51L6.147 1.854a.5.5 0 1 1 .707-.708l.646.647V.5a.5.5 0 0 1 1 0v1.293l.647-.647a.5.5 0 1 1 .707.708L8.5 3.207v1.51l2.053 1.232 1.348-.778.495-1.85a.5.5 0 1 1 .966.26l-.236.882 1.12-.646a.5.5 0 0 1 .5.866l-1.12.646.883.237a.5.5 0 1 1-.26.966l-1.848-.495-1.4.808v2.31l1.4.808 1.849-.495a.5.5 0 1 1 .259.966l-.883.237 1.12.646a.5.5 0 0 1-.5.866l-1.12-.646.236.883a.5.5 0 1 1-.966.258l-.495-1.849-1.348-.778L8.5 11.283v1.51l1.354 1.353a.5.5 0 0 1-.707.708l-.647-.647V15.5a.5.5 0 0 1-.5.5zm2-6.783V6.783l-2-1.2-2 1.2v2.434l2 1.2 2-1.2z"/>
+			</svg>
+
+			<span class="fs-4">Dashboard</span>
+		</a>
+		<hr>
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="{{path('admin_index')}}" class="nav-link {% if current == 'index' %}active {% else %} text-white {% endif %} " aria-current="page">
+
+					Accueil
+				</a>
+
+			</li>
+			<li>
+				<a href="{{path('admin_users')}}" class="nav-link {% if current == 'users' %}active {% else %} text-white {% endif %}">
+
+					Users
+				</a>
+			</li>
+
+			<li>
+				<a href="{{path('admin_tricks')}}" class="nav-link {% if current == 'tricks' %}active {% else %} text-white {% endif %}">
+
+					Tricks
+				</a>
+			</li>
+			<li>
+				<a href="{{ path('admin_comments') }}" class="nav-link {% if current == 'comments' %}active {% else %} text-white {% endif %}">
+
+					Comments
+				</a>
+			</li>
+			<li>
+				<a href="{{ path('admin_categorys') }}" class="nav-link {% if current == 'categorys' %}active {% else %} text-white {% endif %}">
+
+					Category
+				</a>
+			</li>
+
+		</ul>
+		<hr>
+		<div class="dropdown mb-5">
+			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+				{% if app.user.pictureProfile.name %}
+					<img src="{{asset('pictures/' ~ app.user.pictureProfile.name)}}" alt="" width="32" height="32" class="rounded-circle me-2">
+				{% else %}
+					<img src="{{asset('pictures/default_profile.jpg')}}" alt="" width="32" height="32" class="rounded-circle me-2">
+				{% endif %}
+
+
+				<strong>{{app.user.fullName}}</strong>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
+				<li>
+					<a class="dropdown-item" href="{{path('home')}}">Snowtrick</a>
+				</li>
+				<li>
+					<a class="dropdown-item" href="{{path('user_profile')}}">Profile</a>
+				</li>
+				<li><hr class="dropdown-divider"></li>
+				<li>
+					<a class="dropdown-item" href="{{path('user_logout')}}">Sign out</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

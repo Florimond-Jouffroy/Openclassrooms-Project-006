@@ -2,36 +2,57 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use App\Entity\Traits\TimeStampableTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+  use TimeStampableTrait;
+
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column(type: 'integer')]
   private $id;
 
   #[ORM\Column(type: 'string', length: 180, unique: true)]
-  private $email;
+  private string $email;
 
   #[ORM\Column(type: 'json')]
-  private $roles = [];
+  private array $roles = [];
 
   #[ORM\Column(type: 'string')]
-  private $password;
+  private string $password;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $firstname;
+  private string $firstname;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $lastname;
+  private string $lastname;
 
   #[ORM\Column(type: 'string', length: 255, nullable: true)]
-  private $validation_token;
+  private string $validation_token;
+
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
+  private Collection $comments;
+
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
+  private Collection $tricks;
+
+  #[ORM\ManyToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
+  private Picture $pictureProfile;
+
+  public function __construct()
+  {
+    $this->comments = new ArrayCollection();
+    $this->tricks = new ArrayCollection();
+  }
 
   public function getId(): ?int
   {
@@ -158,8 +179,90 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this;
   }
 
+  public function getFullName(): string
+  {
+    return $this->firstname . ' ' . $this->lastname;
+  }
+
   public function isAccountValidated(): bool
   {
     return ($this->getValidationToken() === null ? true : false);
+  }
+
+  /**
+   * @return Collection<int, Comment>
+   */
+  public function getComments(): Collection
+  {
+    return $this->comments;
+  }
+
+  public function addComment(Comment $comment): self
+  {
+    if (!$this->comments->contains($comment)) {
+      $this->comments[] = $comment;
+      $comment->setUser($this);
+    }
+
+    return $this;
+  }
+
+  public function removeComment(Comment $comment): self
+  {
+    if ($this->comments->removeElement($comment)) {
+      // set the owning side to null (unless already changed)
+      if ($comment->getUser() === $this) {
+        $comment->setUser(null);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Trick>
+   */
+  public function getTricks(): Collection
+  {
+    return $this->tricks;
+  }
+
+  public function addTrick(Trick $trick): self
+  {
+    if (!$this->tricks->contains($trick)) {
+      $this->tricks[] = $trick;
+      $trick->setUser($this);
+    }
+
+    return $this;
+  }
+
+  public function removeTrick(Trick $trick): self
+  {
+    if ($this->tricks->removeElement($trick)) {
+      // set the owning side to null (unless already changed)
+      if ($trick->getUser() === $this) {
+        $trick->setUser(null);
+      }
+    }
+
+    return $this;
+  }
+
+  public function getPictureProfile(): ?Picture
+  {
+    return $this->pictureProfile;
+  }
+
+  public function setPictureProfile(?Picture $pictureProfile): self
+  {
+    $this->pictureProfile = $pictureProfile;
+
+    return $this;
+  }
+
+  public function isAdmin()
+  {
+    return in_array('ROLE_ADMIN', $this->roles);
   }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Category;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
 use App\Entity\Traits\TimeStampableTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
@@ -25,27 +26,34 @@ class Trick
   private $id;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $name;
+  private string $name;
 
   #[ORM\Column(type: 'string', length: 255)]
-  private $slug;
+  private string $slug;
 
   #[ORM\Column(type: 'text')]
-  private $description;
+  private string $description;
 
   #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'tricks')]
-  private $category;
+  private Category $category;
 
   #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist', 'remove'])]
-  private $pictures;
+  private Collection $pictures;
 
   #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist', 'remove'])]
-  private $videos;
+  private Collection $videos;
+
+  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
+  private Collection $comments;
+
+  #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
+  private $user;
 
   public function __construct()
   {
     $this->pictures = new ArrayCollection();
     $this->videos = new ArrayCollection();
+    $this->comments = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -164,5 +172,52 @@ class Trick
     }
 
     return $this;
+  }
+
+  /**
+   * @return Collection<int, Comment>
+   */
+  public function getComments(): Collection
+  {
+    return $this->comments;
+  }
+
+  public function addComment(Comment $comment): self
+  {
+    if (!$this->comments->contains($comment)) {
+      $this->comments[] = $comment;
+      $comment->setTrick($this);
+    }
+
+    return $this;
+  }
+
+  public function removeComment(Comment $comment): self
+  {
+    if ($this->comments->removeElement($comment)) {
+      // set the owning side to null (unless already changed)
+      if ($comment->getTrick() === $this) {
+        $comment->setTrick(null);
+      }
+    }
+
+    return $this;
+  }
+
+  public function getUser(): ?User
+  {
+    return $this->user;
+  }
+
+  public function setUser(?User $user): self
+  {
+    $this->user = $user;
+
+    return $this;
+  }
+
+  public function isHis(User $user)
+  {
+    return ($user === $this->getUser()) ? true : false;
   }
 }

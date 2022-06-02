@@ -14,7 +14,7 @@
 			</li>
 			{% if app.user %}
 				<li class="nav-item d-sm-none">
-					<a href="#" class="nav-link">
+					<a href="{{path('user_profile')}}" class="nav-link">
 						<i class="bi bi-person-circle"></i>
 					</a>
 				</li>
@@ -45,7 +45,9 @@
 		{% if app.user %}
 			<div class="dropdown text-end d-none d-sm-block">
 				<a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-					<img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+
+					<img src="{{app.user.pictureProfile is not null ? asset('pictures/' ~ app.user.pictureProfile.name) : asset('pictures/default_profile.jpg')}}" alt="mdo" width="32" height="32" class="rounded-circle">
+
 				</a>
 
 				<ul class="dropdown-menu text-small " aria-labelledby="dropdownUser1" style="">
@@ -53,11 +55,14 @@
 						<a class="dropdown-item" href="{{path('trick_new')}}">New Trick...</a>
 					</li>
 					<li>
-						<a class="dropdown-item" href="#">Settings</a>
-					</li>
-					<li>
 						<a class="dropdown-item" href="{{path('user_profile')}}">Profile</a>
 					</li>
+					{% if app.user.isAdmin %}
+						<li><hr class="dropdown-divider"></li>
+						<li>
+							<a class="dropdown-item" href="{{path('admin_index')}}">Dashboard Admin</a>
+						</li>
+					{% endif %}
 					<li><hr class="dropdown-divider"></li>
 					<li>
 						<a class="dropdown-item" href="{{path('user_logout')}}">Déconexion</a>

@@ -1,0 +1,33 @@
+{% extends "admin/base.html.twig" %}
+
+
+{% block body %}
+
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" data-bs-toggle="tab" href="#menu1">Comments Valide<span class="badge rounded-pill bg-secondary ms-2"></span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-bs-toggle="tab" href="#menu2">Comments No Valid<span class="badge rounded-pill bg-secondary ms-2"></span>
+			</a>
+		</li>
+	</ul>
+
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane container active" id="menu1">
+
+			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: commentsV} only %}
+
+		</div>
+
+		<div class="tab-pane container fade" id="menu2">
+
+			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: commentsNV} only %}
+
+		</div>
+
+	</div>
+
+{% endblock %}

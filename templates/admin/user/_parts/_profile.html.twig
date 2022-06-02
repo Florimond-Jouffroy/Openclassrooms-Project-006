@@ -1,0 +1,34 @@
+<div class="card mt-3" style="width: 300px">
+	<img src="{{asset('pictures/' ~ user.pictureProfile.name)}}" alt="mdo" class="rounded">
+	<div class="card-body">
+		<h4>{{user.fullName}}</h4>
+		<p>{{user.email}}</p>
+		{% for role in user.roles %}
+			{% if role == 'ROLE_ADMIN' %}
+				<span class=" badge bg-danger">{{role}}</span>
+			{% else %}
+				<span class=" badge bg-primary">{{role}}</span>
+			{% endif %}
+		{% endfor %}
+
+	</div>
+	<ul class="list-group list-group-flush">
+
+		{% if user.isAccountValidated %}
+			<li class="list-group-item text-success">
+				Validé
+			</li>
+		{% else %}
+			<li class="list-group-item text-warning">
+				Non validé
+			</li>
+		{% endif %}
+
+		<li class="list-group-item">Création:
+			{{user.createdAt | date("d/m/Y")}}</li>
+		<li class="list-group-item">Derniere modification:
+			{{user.updatedAt | date("d/m/Y")}}</li>
+
+	</ul>
+
+</div>
