@@ -2,90 +2,88 @@
 
 namespace App\Entity;
 
-use App\Entity\Trick;
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\CommentRepository;
 use App\Entity\Traits\TimeStampableTrait;
+use App\Repository\CommentRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Comment
 {
+    use TimeStampableTrait;
 
-  use TimeStampableTrait;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private $id;
 
-  #[ORM\Id]
-  #[ORM\GeneratedValue]
-  #[ORM\Column(type: 'integer')]
-  private  $id;
+    #[ORM\Column(type: 'text')]
+    private string $content;
 
-  #[ORM\Column(type: 'text')]
-  private string $content;
+    #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'comments')]
+    private Trick $trick;
 
-  #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'comments')]
-  private Trick $trick;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
+    private User $user;
 
-  #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
-  private User $user;
+    #[ORM\Column(type: 'integer')]
+    private int $valid = 0;
 
-  #[ORM\Column(type: 'integer')]
-  private int $valid = 0;
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
-  public function getId(): ?int
-  {
-    return $this->id;
-  }
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
 
-  public function getContent(): ?string
-  {
-    return $this->content;
-  }
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
 
-  public function setContent(string $content): self
-  {
-    $this->content = $content;
+        return $this;
+    }
 
-    return $this;
-  }
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
 
-  public function getTrick(): ?Trick
-  {
-    return $this->trick;
-  }
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
 
-  public function setTrick(?Trick $trick): self
-  {
-    $this->trick = $trick;
+        return $this;
+    }
 
-    return $this;
-  }
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
 
-  public function getUser(): ?User
-  {
-    return $this->user;
-  }
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
-  public function setUser(?User $user): self
-  {
-    $this->user = $user;
+        return $this;
+    }
 
-    return $this;
-  }
+    public function getValid()
+    {
+        return $this->valid;
+    }
 
-  public function getValid()
-  {
-    return $this->valid;
-  }
+    public function setValid($valid): self
+    {
+        $this->valid = $valid;
 
-  public function setValid($valid): self
-  {
-    $this->valid = $valid;
+        return $this;
+    }
 
-    return $this;
-  }
-
-  public function isValid()
-  {
-    return ($this->valid === 0) ? true : false;
-  }
+    public function isValid()
+    {
+        return (0 === $this->valid) ? true : false;
+    }
 }

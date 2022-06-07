@@ -2,56 +2,56 @@
 
 namespace App\Controller\User;
 
-use App\Form\UserNamesType;
 use App\Form\PictureProfileType;
+use App\Form\UserNamesType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-  private $em;
-  public function __construct(EntityManagerInterface $em, private string $picturesUploadDirectory)
-  {
-    $this->em = $em;
-  }
+    private $em;
 
-  #[Route('/user/profile', name: 'user_profile')]
-  #[IsGranted('ROLE_USER')]
-  public function profile(Request $request)
-  {
-    $user = $this->getUser();
+    public function __construct(EntityManagerInterface $em, private string $picturesUploadDirectory)
+    {
+        $this->em = $em;
+    }
 
-    $form = $this->createForm(UserNamesType::class, $user);
-    $formPicture = $this->createForm(PictureProfileType::class, $user);
+    #[Route('/user/profile', name: 'user_profile')]
+    #[IsGranted('ROLE_USER')]
+    public function profile(Request $request)
+    {
+        $user = $this->getUser();
 
-    $form->handleRequest($request);
-    $formPicture->handleRequest($request);
+        $form = $this->createForm(UserNamesType::class, $user);
+        $formPicture = $this->createForm(PictureProfileType::class, $user);
 
-    if ($formPicture->isSubmitted() && $formPicture->isValid()) {
+        $form->handleRequest($request);
+        $formPicture->handleRequest($request);
 
-      $picture = $formPicture->get('pictureProfile')->getData();
+        if ($formPicture->isSubmitted() && $formPicture->isValid()) {
+            $picture = $formPicture->get('pictureProfile')->getData();
 
-      if ($picture->getFile() instanceof UploadedFile) {
-        if (null !== $picture->getId()) {
-          $picture->setName(sprintf('__UPDATING__%s', $picture->getName()));
+            if ($picture->getFile() instanceof UploadedFile) {
+                if (null !== $picture->getId()) {
+                    $picture->setName(sprintf('__UPDATING__%s', $picture->getName()));
+                }
+            }
+
+            $this->em->flush();
         }
-      }
 
-      $this->em->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+        }
+
+        return $this->render('user/profile.html.twig', [
+            'form' => $form->createView(),
+            'formPicture' => $formPicture->createView(),
+            'user' => $user,
+        ]);
     }
-
-    if ($form->isSubmitted() && $form->isValid()) {
-      $this->em->flush();
-    }
-
-    return $this->render('user/profile.html.twig', [
-      'form' => $form->createView(),
-      'formPicture' => $formPicture->createView(),
-      'user' => $user,
-    ]);
-  }
 }

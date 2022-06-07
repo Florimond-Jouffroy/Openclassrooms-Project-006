@@ -80,6 +80,7 @@
     }
   },
   "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.8",
     "symfony/debug-bundle": "5.4.*",
     "symfony/maker-bundle": "^1.38",
     "symfony/stopwatch": "5.4.*",

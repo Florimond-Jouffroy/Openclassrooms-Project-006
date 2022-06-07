@@ -8,14 +8,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    #[Route('/', name: 'home')]
+    public function home(TrickRepository $trickRepository)
+    {
+        $tricks = $trickRepository->findAll();
 
-  #[Route("/", name: "home")]
-  public function home(TrickRepository $trickRepository)
-  {
-
-    $tricks = $trickRepository->findAll();
-    return $this->render("home.html.twig", [
-      'tricks' => $tricks
-    ]);
-  }
+        return $this->render('home.html.twig', [
+            'tricks' => $tricks,
+        ]);
+    }
 }

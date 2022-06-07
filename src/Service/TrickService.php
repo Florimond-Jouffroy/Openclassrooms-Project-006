@@ -1,84 +1,83 @@
 <?php
 
-
 namespace App\Service;
 
 use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use App\Utils\Strings;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Security;
 
 class TrickService
 {
-  private $em, $security, $trickRepository;
+    private $em;
+    private $security;
+    private $trickRepository;
 
-  public function __construct(EntityManagerInterface $em, Security $security, TrickRepository $trickRepository)
-  {
-    $this->em = $em;
-    $this->security = $security;
-    $this->trickRepository = $trickRepository;
-  }
-
-  public function compareCollection(ArrayCollection $originalCollection, PersistentCollection $collection): void
-  {
-    foreach ($originalCollection as $element) {
-      if (false === $collection->contains($element)) {
-        $this->em->remove($element);
-      }
-    }
-  }
-
-  public function removeTrick(Trick $trick): void
-  {
-    if (!($pictures = $trick->getPictures())->isEmpty()) {
-      foreach ($pictures as $picture) {
-        $this->em->remove($picture);
-      }
-      $this->em->flush();
+    public function __construct(EntityManagerInterface $em, Security $security, TrickRepository $trickRepository)
+    {
+        $this->em = $em;
+        $this->security = $security;
+        $this->trickRepository = $trickRepository;
     }
 
-    $this->trickRepository->remove($trick);
-  }
-
-  public function addTrick(Trick $trick): void
-  {
-    if (false === ($pictures = $trick->getPictures())->isEmpty()) {
-      foreach ($pictures as $picture) {
-
-        if ($picture->getFile() instanceof UploadedFile) {
-          if (null === $picture->getId()) {
-            $picture->setTrick($trick);
-          } else {
-            $picture->setName(sprintf('__UPDATING__%s', $picture->getName()));
-          }
-        } elseif (null === $picture->getName()) {
-          $pictures->removeElement($picture);
+    public function compareCollection(ArrayCollection $originalCollection, PersistentCollection $collection): void
+    {
+        foreach ($originalCollection as $element) {
+            if (false === $collection->contains($element)) {
+                $this->em->remove($element);
+            }
         }
-      }
     }
 
-    if (false === ($videos = $trick->getVideos())->isEmpty()) {
-      foreach ($videos as $video) {
-        if (null === $video->getLink()) {
-          $videos->removeElement($video);
-        } else {
-          $video->setTrick($trick);
+    public function removeTrick(Trick $trick): void
+    {
+        if (!($pictures = $trick->getPictures())->isEmpty()) {
+            foreach ($pictures as $picture) {
+                $this->em->remove($picture);
+            }
+            $this->em->flush();
         }
-      }
+
+        $this->trickRepository->remove($trick);
     }
 
-    $trick->setSlug(Strings::slug($trick->getName()));
+    public function addTrick(Trick $trick): void
+    {
+        if (false === ($pictures = $trick->getPictures())->isEmpty()) {
+            foreach ($pictures as $picture) {
+                if ($picture->getFile() instanceof UploadedFile) {
+                    if (null === $picture->getId()) {
+                        $picture->setTrick($trick);
+                    } else {
+                        $picture->setName(sprintf('__UPDATING__%s', $picture->getName()));
+                    }
+                } elseif (null === $picture->getName()) {
+                    $pictures->removeElement($picture);
+                }
+            }
+        }
 
-    if (null === $trick->getId()) {
-      $trick->setUser($this->security->getUser());
-      $this->em->persist($trick);
+        if (false === ($videos = $trick->getVideos())->isEmpty()) {
+            foreach ($videos as $video) {
+                if (null === $video->getLink()) {
+                    $videos->removeElement($video);
+                } else {
+                    $video->setTrick($trick);
+                }
+            }
+        }
+
+        $trick->setSlug(Strings::slug($trick->getName()));
+
+        if (null === $trick->getId()) {
+            $trick->setUser($this->security->getUser());
+            $this->em->persist($trick);
+        }
+
+        $this->em->flush();
     }
-
-
-    $this->em->flush();
-  }
 }
