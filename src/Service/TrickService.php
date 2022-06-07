@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Trick;
+use App\Repository\TrickRepository;
 use App\Utils\Strings;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,12 +14,13 @@ use Symfony\Component\Security\Core\Security;
 
 class TrickService
 {
-  private $em, $security;
+  private $em, $security, $trickRepository;
 
-  public function __construct(EntityManagerInterface $em, Security $security)
+  public function __construct(EntityManagerInterface $em, Security $security, TrickRepository $trickRepository)
   {
     $this->em = $em;
     $this->security = $security;
+    $this->trickRepository = $trickRepository;
   }
 
   public function compareCollection(ArrayCollection $originalCollection, PersistentCollection $collection): void
@@ -39,8 +41,7 @@ class TrickService
       $this->em->flush();
     }
 
-    $this->em->remove($trick);
-    $this->em->flush();
+    $this->trickRepository->remove($trick);
   }
 
   public function addTrick(Trick $trick): void
