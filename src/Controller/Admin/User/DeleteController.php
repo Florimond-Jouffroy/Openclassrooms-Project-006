@@ -3,17 +3,17 @@
 namespace App\Controller\Admin\User;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DeleteController extends AbstractController
 {
-  private  $em;
-  public function __construct(EntityManagerInterface $em)
+  private  $userRepository;
+  public function __construct(UserRepository $userRepository)
   {
-    $this->em = $em;
+    $this->userRepository = $userRepository;
   }
 
 
@@ -27,8 +27,7 @@ class DeleteController extends AbstractController
     if ($user === $this->getUser()) {
       $this->addFlash('danger', 'Vous ne pouvez pas supprimer cet utilisateur !');
     } else {
-      $this->em->remove($user);
-      $this->em->flush();
+      $this->userRepository->remove($user);
     }
 
     return $this->redirectToRoute('admin_users');
