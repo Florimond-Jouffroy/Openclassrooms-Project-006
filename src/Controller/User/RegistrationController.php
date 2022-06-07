@@ -61,8 +61,7 @@ class RegistrationController extends AbstractController
 
       $this->mailer->send($emailParameters, $contextParameters);
 
-      $this->em->persist($user);
-      $this->em->flush();
+      $this->userRepository->add($user);
       return $this->redirectToRoute('home');
     }
 
