@@ -8,6 +8,7 @@ use App\Service\TrickService;
 use App\Utils\PersistentCollectionTools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EditController extends AbstractController
@@ -18,7 +19,7 @@ class EditController extends AbstractController
 
     #[Route('/admin/trick/new', name: 'admin_trick_new')]
     #[Route('/amdin/trick/edit/{id}', name: 'admin_trick_edit')]
-    public function edit(Request $request, Trick $trick = null)
+    public function edit(Request $request, Trick $trick = null): Response
     {
         if (null !== $trick) {
             $originalPictures = PersistentCollectionTools::initializeCollection($trick->getPictures());

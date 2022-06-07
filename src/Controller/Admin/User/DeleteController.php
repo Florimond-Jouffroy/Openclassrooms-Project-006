@@ -5,6 +5,7 @@ namespace App\Controller\Admin\User;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,7 +16,7 @@ class DeleteController extends AbstractController
     }
 
     #[Route('/admin/user/{id}/delete', name: 'admin_user_delete')]
-    public function delete(User $user = null)
+    public function delete(User $user = null): Response
     {
         if (null === $user) {
             throw new NotFoundHttpException('User not found !');

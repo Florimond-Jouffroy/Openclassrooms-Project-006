@@ -9,6 +9,7 @@ use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,76 +18,65 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class ForgotController extends AbstractController
 {
-    private $userRepository;
-    private $passwordRequestRepository;
-    private $em;
-    private $mailer;
-    private $passwordHasher;
-
     public function __construct(
-    UserRepository $userRepository,
-    PasswordRequestRepository $passwordRequestRepository,
-    EntityManagerInterface $em,
-    MailerService $mailer,
-    UserPasswordHasherInterface $userPasswordHasher
-  ) {
-        $this->userRepository = $userRepository;
-        $this->passwordRequestRepository = $passwordRequestRepository;
-        $this->em = $em;
-        $this->mailer = $mailer;
-        $this->passwordHasher = $userPasswordHasher;
+        private UserRepository $userRepository,
+        private PasswordRequestRepository $passwordRequestRepository,
+        private EntityManagerInterface $em,
+        private MailerService $mailer,
+        private UserPasswordHasherInterface $userPasswordHasher
+    ) {
     }
 
     #[Route('/forgot-password', name: 'user_forgotPassword')]
-  public function forgotPassword(Request $request, TokenGeneratorInterface $tokenGenerator)
-  {
-      $form = $this->createForm(EmailRequestType::class);
-      $form->handleRequest($request);
+    public function forgotPassword(Request $request, TokenGeneratorInterface $tokenGenerator): Response
+    {
+        $form = $this->createForm(EmailRequestType::class);
+        $form->handleRequest($request);
 
-      if ($form->isSubmitted() && $form->isValid()) {
-          $userEmail = $form->get('email')->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userEmail = $form->get('email')->getData();
 
-          if (null === $this->userRepository->findOneBy(['email' => $userEmail])) {
-              return $this->redirectToRoute('home');
-          }
+            if (null === $this->userRepository->findOneBy(['email' => $userEmail])) {
+                return $this->redirectToRoute('home');
+            }
 
-          $passwordRequest = $this->passwordRequestRepository->findOneBy(['email' => $userEmail]);
+            $passwordRequest = $this->passwordRequestRepository->findOneBy(['email' => $userEmail]);
 
-          if (null === $passwordRequest || (null !== $passwordRequest && false === $passwordRequest->isStillValid())) {
-              if (null !== $passwordRequest && false === $passwordRequest->isStillValid()) {
-                  $this->em->remove($passwordRequest);
-                  $this->em->flush();
-              }
+            if (null === $passwordRequest || (null !== $passwordRequest && false === $passwordRequest->isStillValid())) {
+                if (null !== $passwordRequest && false === $passwordRequest->isStillValid()) {
+                    $this->em->remove($passwordRequest);
+                    $this->em->flush();
+                }
 
-              $passwordRequest = new PasswordRequest();
-              $passwordRequest->updateTimestamps();
-              $passwordRequest->setEmail($userEmail);
-              $passwordRequest->setToken($tokenGenerator->generateToken());
+                $passwordRequest = new PasswordRequest();
+                $passwordRequest->updateTimestamps();
+                $passwordRequest->setEmail($userEmail);
+                $passwordRequest->setToken($tokenGenerator->generateToken());
 
-              $this->em->persist($passwordRequest);
-              $this->em->flush();
-          }
+                $this->em->persist($passwordRequest);
+                $this->em->flush();
+            }
 
-          $url = $this->generateUrl('user_resetPassword', ['token' => $passwordRequest->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+            $url = $this->generateUrl('user_resetPassword', ['token' => $passwordRequest->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-          $emailParameters = [
-        'from' => 'noreply@snowtrick.com',
-        'to' => new Address($userEmail),
-        'subject' => 'Reset Password',
-        'htmlTemplate' => 'email/user/resetPassword.html.twig',
-      ];
+            $emailParameters = [
+                'from' => 'noreply@snowtrick.com',
+                'to' => new Address($userEmail),
+                'subject' => 'Reset Password',
+                'htmlTemplate' => 'email/user/resetPassword.html.twig',
+            ];
 
-          $contextParameters = [
-        'url' => $url,
-      ];
+            $contextParameters = [
+                'url' => $url,
+            ];
 
-          $this->mailer->send($emailParameters, $contextParameters);
+            $this->mailer->send($emailParameters, $contextParameters);
 
-          return $this->redirectToRoute('home');
-      }
+            return $this->redirectToRoute('home');
+        }
 
-      return $this->render('user/password/emailRequest.html.twig', [
-      'form' => $form->createView(),
-    ]);
-  }
+        return $this->render('user/password/emailRequest.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }

@@ -13,15 +13,8 @@ use Symfony\Component\Security\Core\Security;
 
 class TrickService
 {
-    private $em;
-    private $security;
-    private $trickRepository;
-
-    public function __construct(EntityManagerInterface $em, Security $security, TrickRepository $trickRepository)
+    public function __construct(private EntityManagerInterface $em, private Security $security, private TrickRepository $trickRepository)
     {
-        $this->em = $em;
-        $this->security = $security;
-        $this->trickRepository = $trickRepository;
     }
 
     public function compareCollection(ArrayCollection $originalCollection, PersistentCollection $collection): void

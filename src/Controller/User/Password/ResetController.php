@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,7 +22,7 @@ class ResetController extends AbstractController
     }
 
     #[Route('/reset-password/{token}', name: 'user_resetPassword')]
-    public function resetPassword(Request $request, string $token)
+    public function resetPassword(Request $request, string $token): Response
     {
         $passwordRequest = $this->passwordRequestRepository->findOneBy(['token' => $token]);
 

@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use App\Service\TrickService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,7 +17,7 @@ class DeleteController extends AbstractController
     }
 
     #[Route('/admin/trick/{id}/delete', name: 'admin_trick_delete')]
-    public function delete(Trick $trick = null)
+    public function delete(Trick $trick = null): Response
     {
         if (null === $trick) {
             throw new NotFoundHttpException('Trick not found !');

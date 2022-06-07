@@ -7,21 +7,18 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class MailerService
 {
-    private $mailer;
-
-    public function __construct(MailerInterface $mailer)
+    public function __construct(private MailerInterface $mailer)
     {
-        $this->mailer = $mailer;
     }
 
-    public function send(array $emailParameters, array $contextParameters)
+    public function send(array $emailParameters, array $contextParameters): void
     {
         $email = (new TemplatedEmail())
-      ->from($emailParameters['from'])
-      ->to($emailParameters['to'])
-      ->subject($emailParameters['subject'])
-      ->htmlTemplate($emailParameters['htmlTemplate'])
-      ->context($contextParameters);
+            ->from($emailParameters['from'])
+            ->to($emailParameters['to'])
+            ->subject($emailParameters['subject'])
+            ->htmlTemplate($emailParameters['htmlTemplate'])
+            ->context($contextParameters);
 
         $this->mailer->send($email);
     }

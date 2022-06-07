@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
@@ -22,7 +23,7 @@ class ProfileController extends AbstractController
 
     #[Route('/user/profile', name: 'user_profile')]
     #[IsGranted('ROLE_USER')]
-    public function profile(Request $request)
+    public function profile(Request $request): Response
     {
         $user = $this->getUser();
 

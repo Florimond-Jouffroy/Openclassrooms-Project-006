@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EditController extends AbstractController
@@ -16,7 +17,7 @@ class EditController extends AbstractController
 
     #[Route('/admin/user/{id}/addAdmin', name: 'admin_user_addRoleAdmin')]
     #[Route('/admin/user/{id}/removeRoleAdmin', name: 'admin_user_removeRoleAdmin')]
-    public function editRole(User $user, string $userRole = 'ROLE_ADMIN')
+    public function editRole(User $user, string $userRole = 'ROLE_ADMIN'): Response
     {
         $roles = new ArrayCollection($user->getRoles());
 

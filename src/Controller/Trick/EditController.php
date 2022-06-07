@@ -9,6 +9,7 @@ use App\Utils\PersistentCollectionTools;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EditController extends AbstractController
@@ -20,7 +21,7 @@ class EditController extends AbstractController
     #[Route('/trick/new', name: 'trick_new')]
     #[Route('/trick/{id}/edit', name: 'trick_edit')]
     #[IsGranted('ROLE_USER')]
-    public function edit(Trick $trick = null, Request $request)
+    public function edit(Trick $trick = null, Request $request): Response
     {
         if (null !== $trick) {
             if (false === $trick->isHis($this->getUser())) {

@@ -5,6 +5,7 @@ namespace App\Controller\Admin\Comment;
 use App\Entity\Comment;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,7 +16,7 @@ class ValidController extends AbstractController
     }
 
     #[Route('/admin/comment/{id}/validChange', name: 'admin_comment_validChange')]
-    public function valid(Comment $comment)
+    public function valid(Comment $comment): Response
     {
         if (null === $comment) {
             throw new NotFoundHttpException('Comment not found !');

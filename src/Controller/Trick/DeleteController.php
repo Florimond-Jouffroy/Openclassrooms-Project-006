@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use App\Service\TrickService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +18,7 @@ class DeleteController extends AbstractController
 
     #[Route('/trick/{id}/delete', name: 'trick_delete')]
     #[IsGranted('ROLE_USER')]
-    public function delete(Trick $trick = null)
+    public function delete(Trick $trick = null): Response
     {
         if (null === $trick) {
             throw new NotFoundHttpException('Trick not found !');

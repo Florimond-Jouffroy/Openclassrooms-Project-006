@@ -4,12 +4,13 @@ namespace App\Controller\Admin\Comment;
 
 use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
     #[Route('/admin/comments', name: 'admin_comments')]
-    public function index(CommentRepository $commentRepository)
+    public function index(CommentRepository $commentRepository): Response
     {
         $validComments = [];
         $hiddenComments = [];

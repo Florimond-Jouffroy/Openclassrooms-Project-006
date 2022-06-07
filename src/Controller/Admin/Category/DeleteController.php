@@ -5,6 +5,7 @@ namespace App\Controller\Admin\Category;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,7 +16,7 @@ class DeleteController extends AbstractController
     }
 
     #[Route('/admin/category/{id}/delete', name: 'admin_category_delete')]
-    public function delete(Category $category = null)
+    public function delete(Category $category = null): Response
     {
         if (null === $category) {
             throw new NotFoundHttpException('Category not found !');
