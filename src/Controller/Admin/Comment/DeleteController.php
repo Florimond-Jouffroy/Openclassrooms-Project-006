@@ -3,17 +3,17 @@
 namespace App\Controller\Admin\Comment;
 
 use App\Entity\Comment;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\CommentRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DeleteController extends AbstractController
 {
-  private $em;
-  public function __construct(EntityManagerInterface $em)
+  private $commentRepository;
+  public function __construct(CommentRepository $commentRepository)
   {
-    $this->em = $em;
+    $this->commentRepository = $commentRepository;
   }
 
   #[Route('/admin/comment/{id}/delete', name: 'admin_comment_delete')]
@@ -23,8 +23,7 @@ class DeleteController extends AbstractController
       throw new NotFoundHttpException('Comment not found !');
     }
 
-    $this->em->remove($comment);
-    $this->em->flush();
+    $this->commentRepository->remove($comment);
 
     return $this->redirectToRoute('admin_comments');
   }
