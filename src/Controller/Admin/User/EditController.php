@@ -3,6 +3,7 @@
 namespace App\Controller\Admin\User;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,13 +22,16 @@ class EditController extends AbstractController
   #[Route('/admin/user/{id}/removeRoleAdmin', name: "admin_user_removeRoleAdmin")]
   public function editRole(User $user, String $userRole = 'ROLE_ADMIN')
   {
-    if (in_array($userRole, $roles = $user->getRoles())) {
-      unset($roles[array_search($userRole, $roles)]);
+
+    $roles = new ArrayCollection($user->getRoles());
+
+    if ($roles->contains($userRole)) {
+      $roles->remove($userRole);
     } else {
-      array_push($roles, $userRole);
+      $roles->add($userRole);
     }
 
-    $user->setRoles($roles);
+    $user->setRoles($roles->toArray());
     $this->em->flush();
 
     return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
