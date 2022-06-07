@@ -41,12 +41,10 @@ class ProfileController extends AbstractController
         }
       }
 
-      $this->em->persist($user);
       $this->em->flush();
     }
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $this->em->persist($user);
       $this->em->flush();
     }
 
