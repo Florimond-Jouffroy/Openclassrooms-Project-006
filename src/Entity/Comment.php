@@ -83,4 +83,9 @@ class Comment
 
     return $this;
   }
+
+  public function isValid()
+  {
+    return ($this->valid === 0) ? true : false;
+  }
 }
