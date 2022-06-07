@@ -31,9 +31,9 @@ class EditController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if (null === $category->getId()) {
                 $this->categoryRepository->add($category);
-            } else {
-                $this->em->flush();
             }
+
+            $this->em->flush();
 
             return $this->redirectToRoute('admin_categorys');
         }
