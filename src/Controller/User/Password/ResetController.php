@@ -2,62 +2,52 @@
 
 namespace App\Controller\User\Password;
 
-use App\Service\MailerService;
+use App\Repository\PasswordRequestRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\PasswordRequestRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ResetController extends AbstractController
 {
-
-  private $userRepository, $passwordRequestRepository, $em, $mailer, $passwordHasher;
-
-  public function __construct(
-    UserRepository $userRepository,
-    PasswordRequestRepository $passwordRequestRepository,
-    EntityManagerInterface $em,
-    MailerService $mailer,
-    UserPasswordHasherInterface $userPasswordHasher
-  ) {
-    $this->userRepository = $userRepository;
-    $this->passwordRequestRepository = $passwordRequestRepository;
-    $this->em = $em;
-    $this->mailer = $mailer;
-    $this->passwordHasher = $userPasswordHasher;
-  }
-
-  #[Route('/reset-password/{token}', name: "user_resetPassword")]
-  public function resetPassword(Request $request, string $token)
-  {
-    $passwordRequest = $this->passwordRequestRepository->findOneBy(['token' => $token]);
-
-    $form = $this->createForm(PasswordRequestType::class);
-    $form->handleRequest($request);
-
-    if ($passwordRequest === null) {
-      return $this->redirectToRoute('home');
+    public function __construct(
+        private UserRepository $userRepository,
+        private PasswordRequestRepository $passwordRequestRepository,
+        private EntityManagerInterface $em,
+        private UserPasswordHasherInterface $userPasswordHasher
+    ) {
     }
 
-    if ($form->isSubmitted() && $form->isValid()) {
+    #[Route('/reset-password/{token}', name: 'user_resetPassword')]
+    public function resetPassword(Request $request, string $token): Response
+    {
+        $passwordRequest = $this->passwordRequestRepository->findOneBy(['token' => $token]);
 
-      $newPassword = $form->getData('password');
-      $user = $this->userRepository->findOneBy(['email' => $passwordRequest->getEmail()]);
+        $form = $this->createForm(PasswordRequestType::class);
+        $form->handleRequest($request);
 
-      $user->setPassword($this->passwordHasher->hashPassword($user, $newPassword['password']));
+        if (null === $passwordRequest) {
+            return $this->redirectToRoute('home');
+        }
 
-      $this->em->persist($user);
-      $this->em->remove($passwordRequest);
-      $this->em->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newPassword = $form->getData('password');
+            $user = $this->userRepository->findOneBy(['email' => $passwordRequest->getEmail()]);
 
-      return $this->redirectToRoute('home');
+            $user->setPassword($this->passwordHasher->hashPassword($user, $newPassword['password']));
+
+            $this->em->persist($user);
+            $this->em->remove($passwordRequest);
+            $this->em->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('user/password/passwordRequest.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
-
-    return $this->render('user/password/passwordRequest.html.twig', [
-      'form' => $form->createView()
-    ]);
-  }
 }

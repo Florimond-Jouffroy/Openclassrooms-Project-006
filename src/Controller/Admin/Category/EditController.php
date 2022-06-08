@@ -4,40 +4,43 @@ namespace App\Controller\Admin\Category;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class EditController extends AbstractController
 {
-  private $em;
-  public function __construct(EntityManagerInterface $em)
-  {
-    $this->em = $em;
-  }
-
-  #[Route('/admin/category/new', name: 'admin_category_new')]
-  #[Route('/admin/category/{id}/edit', name: 'admin_category_edit')]
-  public function new(Request $request, Category $category = null)
-  {
-    if ($category === null) {
-      $category = new Category;
+    public function __construct(private EntityManagerInterface $em, private CategoryRepository $categoryRepository)
+    {
     }
 
-    $form = $this->createForm(CategoryType::class, $category);
-    $form->handleRequest($request);
+    #[Route('/admin/category/new', name: 'admin_category_new')]
+    #[Route('/admin/category/{id}/edit', name: 'admin_category_edit')]
+    public function new(Request $request, Category $category = null): Response
+    {
+        if (null === $category) {
+            $category = new Category();
+        }
 
-    if ($form->isSubmitted() && $form->isValid()) {
-      $this->em->persist($category);
-      $this->em->flush();
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
 
-      return $this->redirectToRoute('admin_categorys');
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (null === $category->getId()) {
+                $this->categoryRepository->add($category);
+            }
+
+            $this->em->flush();
+
+            return $this->redirectToRoute('admin_categorys');
+        }
+
+        return $this->render('admin/category/new.html.twig', [
+            'current' => 'categorys',
+            'form' => $form->createView(),
+        ]);
     }
-
-    return $this->render('admin/category/new.html.twig', [
-      'current' => 'categorys',
-      'form' => $form->createView()
-    ]);
-  }
 }

@@ -2,267 +2,267 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
 use App\Entity\Traits\TimeStampableTrait;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-  use TimeStampableTrait;
+    use TimeStampableTrait;
 
-  #[ORM\Id]
-  #[ORM\GeneratedValue]
-  #[ORM\Column(type: 'integer')]
-  private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private $id;
 
-  #[ORM\Column(type: 'string', length: 180, unique: true)]
-  private string $email;
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    private string $email;
 
-  #[ORM\Column(type: 'json')]
-  private array $roles = [];
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
-  #[ORM\Column(type: 'string')]
-  private string $password;
+    #[ORM\Column(type: 'string')]
+    private string $password;
 
-  #[ORM\Column(type: 'string', length: 255)]
-  private string $firstname;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $firstname;
 
-  #[ORM\Column(type: 'string', length: 255)]
-  private string $lastname;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $lastname;
 
-  #[ORM\Column(type: 'string', length: 255, nullable: true)]
-  private string $validation_token;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private string $validation_token;
 
-  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
-  private Collection $comments;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
+    private Collection $comments;
 
-  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
-  private Collection $tricks;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
+    private Collection $tricks;
 
-  #[ORM\ManyToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
-  private Picture $pictureProfile;
+    #[ORM\ManyToOne(targetEntity: Picture::class, cascade: ['persist', 'remove'])]
+    private Picture $pictureProfile;
 
-  public function __construct()
-  {
-    $this->comments = new ArrayCollection();
-    $this->tricks = new ArrayCollection();
-  }
-
-  public function getId(): ?int
-  {
-    return $this->id;
-  }
-
-  public function getEmail(): ?string
-  {
-    return $this->email;
-  }
-
-  public function setEmail(string $email): self
-  {
-    $this->email = $email;
-
-    return $this;
-  }
-
-  /**
-   * A visual identifier that represents this user.
-   *
-   * @see UserInterface
-   */
-  public function getUserIdentifier(): string
-  {
-    return (string) $this->email;
-  }
-
-  /**
-   * @deprecated since Symfony 5.3, use getUserIdentifier instead
-   */
-  public function getUsername(): string
-  {
-    return (string) $this->email;
-  }
-
-  /**
-   * @see UserInterface
-   */
-  public function getRoles(): array
-  {
-    $roles = $this->roles;
-    // guarantee every user at least has ROLE_USER
-    $roles[] = 'ROLE_USER';
-
-    return array_unique($roles);
-  }
-
-  public function setRoles(array $roles): self
-  {
-    $this->roles = $roles;
-
-    return $this;
-  }
-
-  /**
-   * @see PasswordAuthenticatedUserInterface
-   */
-  public function getPassword(): string
-  {
-    return $this->password;
-  }
-
-  public function setPassword(string $password): self
-  {
-    $this->password = $password;
-
-    return $this;
-  }
-
-  /**
-   * Returning a salt is only needed, if you are not using a modern
-   * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-   *
-   * @see UserInterface
-   */
-  public function getSalt(): ?string
-  {
-    return null;
-  }
-
-  /**
-   * @see UserInterface
-   */
-  public function eraseCredentials()
-  {
-    // If you store any temporary, sensitive data on the user, clear it here
-    // $this->plainPassword = null;
-  }
-
-  public function getFirstname(): ?string
-  {
-    return $this->firstname;
-  }
-
-  public function setFirstname(string $firstname): self
-  {
-    $this->firstname = $firstname;
-
-    return $this;
-  }
-
-  public function getLastname(): ?string
-  {
-    return $this->lastname;
-  }
-
-  public function setLastname(string $lastname): self
-  {
-    $this->lastname = $lastname;
-
-    return $this;
-  }
-
-  public function getValidationToken(): ?string
-  {
-    return $this->validation_token;
-  }
-
-  public function setValidationToken(?string $validation_token): self
-  {
-    $this->validation_token = $validation_token;
-
-    return $this;
-  }
-
-  public function getFullName(): string
-  {
-    return $this->firstname . ' ' . $this->lastname;
-  }
-
-  public function isAccountValidated(): bool
-  {
-    return ($this->getValidationToken() === null ? true : false);
-  }
-
-  /**
-   * @return Collection<int, Comment>
-   */
-  public function getComments(): Collection
-  {
-    return $this->comments;
-  }
-
-  public function addComment(Comment $comment): self
-  {
-    if (!$this->comments->contains($comment)) {
-      $this->comments[] = $comment;
-      $comment->setUser($this);
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
 
-    return $this;
-  }
-
-  public function removeComment(Comment $comment): self
-  {
-    if ($this->comments->removeElement($comment)) {
-      // set the owning side to null (unless already changed)
-      if ($comment->getUser() === $this) {
-        $comment->setUser(null);
-      }
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
-    return $this;
-  }
-
-  /**
-   * @return Collection<int, Trick>
-   */
-  public function getTricks(): Collection
-  {
-    return $this->tricks;
-  }
-
-  public function addTrick(Trick $trick): self
-  {
-    if (!$this->tricks->contains($trick)) {
-      $this->tricks[] = $trick;
-      $trick->setUser($this);
+    public function getEmail(): ?string
+    {
+        return $this->email;
     }
 
-    return $this;
-  }
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
-  public function removeTrick(Trick $trick): self
-  {
-    if ($this->tricks->removeElement($trick)) {
-      // set the owning side to null (unless already changed)
-      if ($trick->getUser() === $this) {
-        $trick->setUser(null);
-      }
+        return $this;
     }
 
-    return $this;
-  }
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
 
-  public function getPictureProfile(): ?Picture
-  {
-    return $this->pictureProfile;
-  }
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
 
-  public function setPictureProfile(?Picture $pictureProfile): self
-  {
-    $this->pictureProfile = $pictureProfile;
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
 
-    return $this;
-  }
+        return array_unique($roles);
+    }
 
-  public function isAdmin()
-  {
-    return in_array('ROLE_ADMIN', $this->roles);
-  }
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getValidationToken(): ?string
+    {
+        return $this->validation_token;
+    }
+
+    public function setValidationToken(?string $validation_token): self
+    {
+        $this->validation_token = $validation_token;
+
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function isAccountValidated(): bool
+    {
+        return null === $this->getValidationToken() ? true : false;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trick>
+     */
+    public function getTricks(): Collection
+    {
+        return $this->tricks;
+    }
+
+    public function addTrick(Trick $trick): self
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrick(Trick $trick): self
+    {
+        if ($this->tricks->removeElement($trick)) {
+            // set the owning side to null (unless already changed)
+            if ($trick->getUser() === $this) {
+                $trick->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPictureProfile(): ?Picture
+    {
+        return $this->pictureProfile;
+    }
+
+    public function setPictureProfile(?Picture $pictureProfile): self
+    {
+        $this->pictureProfile = $pictureProfile;
+
+        return $this;
+    }
+
+    public function isAdmin()
+    {
+        return in_array('ROLE_ADMIN', $this->roles, true);
+    }
 }

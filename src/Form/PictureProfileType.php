@@ -10,16 +10,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PictureProfileType extends AbstractType
 {
-  public function buildForm(FormBuilderInterface $builder, array $options): void
-  {
-    $builder
-      ->add('pictureProfile', PictureType::class, []);
-  }
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('pictureProfile', PictureType::class, []);
+    }
 
-  public function configureOptions(OptionsResolver $resolver): void
-  {
-    $resolver->setDefaults([
-      'data_class' => User::class,
-    ]);
-  }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
+    }
 }

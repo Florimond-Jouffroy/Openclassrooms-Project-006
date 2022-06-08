@@ -11,27 +11,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class LoginType extends AbstractType
 {
-  public function buildForm(FormBuilderInterface $builder, array $options): void
-  {
-    $builder
-      ->add('email', EmailType::class, [
-        'label' => "Email",
-        'constraints' => [
-          new Assert\NotBlank(message: "Vous devez entrez votre adresse de connexion !"),
-        ]
-      ])
-      ->add('password', PasswordType::class, [
-        'label' => "Password",
-        'constraints' => [
-          new Assert\NotBlank(message: "Vous devez entrez votre mot de passe !")
-        ]
-      ]);
-  }
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'constraints' => [
+                    new Assert\NotBlank(message: 'Vous devez entrez votre adresse de connexion !'),
+                ],
+            ])
+            ->add('password', PasswordType::class, [
+                'label' => 'Password',
+                'constraints' => [
+                    new Assert\NotBlank(message: 'Vous devez entrez votre mot de passe !'),
+                ],
+            ]);
+    }
 
-  public function configureOptions(OptionsResolver $resolver): void
-  {
-    $resolver->setDefaults([
-      // Configure your form options here
-    ]);
-  }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            // Configure your form options here
+        ]);
+    }
 }

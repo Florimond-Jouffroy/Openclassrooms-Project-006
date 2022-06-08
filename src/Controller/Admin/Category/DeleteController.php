@@ -1,33 +1,29 @@
 <?php
 
-
 namespace App\Controller\Admin\Category;
 
 use App\Entity\Category;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteController extends AbstractController
 {
-
-  private $em;
-  public function __construct(EntityManagerInterface $em)
-  {
-    $this->em = $em;
-  }
-
-  #[Route('/admin/category/{id}/delete', name: 'admin_category_delete')]
-  public function delete(Category $category = null)
-  {
-    if (null === $category) {
-      throw new NotFoundHttpException('Category not found !');
+    public function __construct(private CategoryRepository $categoryRepository)
+    {
     }
 
-    $this->em->remove($category);
-    $this->em->flush();
+    #[Route('/admin/category/{id}/delete', name: 'admin_category_delete')]
+    public function delete(Category $category = null): Response
+    {
+        if (null === $category) {
+            throw new NotFoundHttpException('Category not found !');
+        }
 
-    return $this->redirectToRoute('admin_categorys');
-  }
+        $this->categoryRepository->remove($category);
+
+        return $this->redirectToRoute('admin_categorys');
+    }
 }

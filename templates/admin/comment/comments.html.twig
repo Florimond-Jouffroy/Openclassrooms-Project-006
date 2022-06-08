@@ -18,13 +18,13 @@
 	<div class="tab-content">
 		<div class="tab-pane container active" id="menu1">
 
-			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: commentsV} only %}
+			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: validComments} only %}
 
 		</div>
 
 		<div class="tab-pane container fade" id="menu2">
 
-			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: commentsNV} only %}
+			{% include 'admin/comment/_parts/_comments.html.twig' with {comments: hiddenComments} only %}
 
 		</div>
 

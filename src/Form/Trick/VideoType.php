@@ -3,32 +3,27 @@
 namespace App\Form\Trick;
 
 use App\Entity\Video;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class VideoType extends AbstractType
 {
-  public function buildForm(FormBuilderInterface $builder, array $options): void
-  {
-    $builder
-      ->add('link', TextareaType::class, [
-        'label' => "Lien de la vidéo",
-        'block_prefix' => 'link_video',
-        'required' => false
-      ]);
-  }
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('link', TextareaType::class, [
+                'label' => 'Lien de la vidéo',
+                'block_prefix' => 'link_video',
+                'required' => false,
+            ]);
+    }
 
-
-
-  public function configureOptions(OptionsResolver $resolver): void
-  {
-    $resolver->setDefaults([
-      'data_class' => Video::class,
-    ]);
-  }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Video::class,
+        ]);
+    }
 }

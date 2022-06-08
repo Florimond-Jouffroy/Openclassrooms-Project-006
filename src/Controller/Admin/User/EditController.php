@@ -3,33 +3,33 @@
 namespace App\Controller\Admin\User;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class EditController extends AbstractController
 {
-
-  private  $em;
-  public function __construct(EntityManagerInterface $em)
-  {
-    $this->em = $em;
-  }
-
-  #[Route('/admin/user/{id}/addAdmin', name: "admin_user_addRoleAdmin")]
-  #[Route('/admin/user/{id}/removeRoleAdmin', name: "admin_user_removeRoleAdmin")]
-  public function editRole(User $user, String $userRole = 'ROLE_ADMIN')
-  {
-    if (in_array($userRole, $roles = $user->getRoles())) {
-      unset($roles[array_search($userRole, $roles)]);
-    } else {
-      array_push($roles, $userRole);
+    public function __construct(private EntityManagerInterface $em)
+    {
     }
 
-    $user->setRoles($roles);
-    $this->em->flush();
+    #[Route('/admin/user/{id}/addAdmin', name: 'admin_user_addRoleAdmin')]
+    #[Route('/admin/user/{id}/removeRoleAdmin', name: 'admin_user_removeRoleAdmin')]
+    public function editRole(User $user, string $userRole = 'ROLE_ADMIN'): Response
+    {
+        $roles = new ArrayCollection($user->getRoles());
 
-    return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
-  }
+        if ($roles->contains($userRole)) {
+            $roles->remove($userRole);
+        } else {
+            $roles->add($userRole);
+        }
+
+        $user->setRoles($roles->toArray());
+        $this->em->flush();
+
+        return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
+    }
 }

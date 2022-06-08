@@ -10,21 +10,21 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EmailRequestType extends AbstractType
 {
-  public function buildForm(FormBuilderInterface $builder, array $options): void
-  {
-    $builder
-      ->add('email', EmailType::class, [
-        'label' => "Email",
-        'constraints' => [
-          new NotBlank(message: "Vous devez entrez votre adresse de connexion !")
-        ]
-      ]);
-  }
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'constraints' => [
+                    new NotBlank(message: 'Vous devez entrez votre adresse de connexion !'),
+                ],
+            ]);
+    }
 
-  public function configureOptions(OptionsResolver $resolver): void
-  {
-    $resolver->setDefaults([
-      // Configure your form options here
-    ]);
-  }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            // Configure your form options here
+        ]);
+    }
 }

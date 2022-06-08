@@ -2,13 +2,12 @@
 
 namespace App\Repository;
 
-use App\Entity\Trick;
 use App\Entity\Comment;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -20,58 +19,56 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-  public function __construct(ManagerRegistry $registry)
-  {
-    parent::__construct($registry, Comment::class);
-  }
-
-  /**
-   * @throws ORMException
-   * @throws OptimisticLockException
-   */
-  public function add(Comment $entity, bool $flush = true): void
-  {
-    $this->_em->persist($entity);
-    if ($flush) {
-      $this->_em->flush();
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Comment::class);
     }
-  }
 
-  /**
-   * @throws ORMException
-   * @throws OptimisticLockException
-   */
-  public function remove(Comment $entity, bool $flush = true): void
-  {
-    $this->_em->remove($entity);
-    if ($flush) {
-      $this->_em->flush();
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function add(Comment $entity, bool $flush = true): void
+    {
+        $this->_em->persist($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
     }
-  }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function remove(Comment $entity, bool $flush = true): void
+    {
+        $this->_em->remove($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
 
-  public function findAllCommentTrick($page, $limit, Trick $trick)
-  {
-    $qb = $this->_em->createQueryBuilder('c');
-    $qb->select('c')
-      ->from('App\Entity\Comment', 'c')
-      ->leftJoin('c.trick', 'a')
-      ->where('a.id =:id')
-      ->orderBy('c.createdAt', 'DESC')
-      ->setParameter('id', $trick->getId())
-      ->setFirstResult(($page - 1) * $limit)
-      ->setMaxResults($limit);
+    public function findAllCommentTrick($page, $limit, Trick $trick)
+    {
+        $qb = $this->_em->createQueryBuilder('c');
+        $qb->select('c')
+            ->from('App\Entity\Comment', 'c')
+            ->leftJoin('c.trick', 'a')
+            ->where('a.id =:id')
+            ->orderBy('c.createdAt', 'DESC')
+            ->setParameter('id', $trick->getId())
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
 
-    $query = $qb->getQuery();
+        $query = $qb->getQuery();
 
-    return $query->execute();
-  }
+        return $query->execute();
+    }
 
-
-  // /**
-  //  * @return Comment[] Returns an array of Comment objects
-  //  */
-  /*
+    // /**
+    //  * @return Comment[] Returns an array of Comment objects
+    //  */
+    /*
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('c')
@@ -85,7 +82,7 @@ class CommentRepository extends ServiceEntityRepository
     }
     */
 
-  /*
+    /*
     public function findOneBySomeField($value): ?Comment
     {
         return $this->createQueryBuilder('c')

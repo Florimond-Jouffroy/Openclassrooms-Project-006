@@ -10,18 +10,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CommentType extends AbstractType
 {
-  public function buildForm(FormBuilderInterface $builder, array $options): void
-  {
-    $builder
-      ->add('content', TextareaType::class, [
-        'label' => 'Votre commentaire :'
-      ]);
-  }
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('content', TextareaType::class, [
+                'label' => 'Votre commentaire :',
+            ]);
+    }
 
-  public function configureOptions(OptionsResolver $resolver): void
-  {
-    $resolver->setDefaults([
-      'data_class' => Comment::class,
-    ]);
-  }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Comment::class,
+        ]);
+    }
 }
