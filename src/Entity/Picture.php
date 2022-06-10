@@ -95,7 +95,9 @@ class Picture
         $fileName = uniqid();
 
         if (str_contains($this->name, '__UPDATING__')) {
-            unlink($this->filepath);
+            if (!str_contains($this->name, 'default_profile')) {
+                unlink($this->filepath);
+            }
             $this->name = str_replace('__UPDATING__', '', $this->name);
             $uploadTo = str_replace('/' . $this->name, '', $this->filepath);
         } else {
