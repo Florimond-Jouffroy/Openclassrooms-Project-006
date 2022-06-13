@@ -2,21 +2,25 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
-use App\Entity\Picture;
-use App\Entity\Trick;
+use Faker\Factory;
 use App\Entity\User;
+use App\Entity\Trick;
+use App\Utils\Strings;
+use App\Entity\Picture;
+use App\Entity\Category;
+use App\Entity\Video;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Collections\ArrayCollection;
-use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 class AppFixtures extends Fixture
 {
-    public function __construct(private UserPasswordHasherInterface $passwordHasher, private string $picturesUploadDirectory)
-    {
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher,
+        private string $picturesUploadDirectory
+    ) {
     }
 
     public function load(ObjectManager $manager): void
@@ -54,11 +58,22 @@ class AppFixtures extends Fixture
             $categorys->add($category);
         }
 
-        foreach ($trickNames as $name) {
+        foreach ($trickNames as $key => $name) {
+            $picture = new Picture($this->picturesUploadDirectory);
+            $picture->setName('default_pictures-' . $key . '.jpg')
+                ->setFilepath($this->picturesUploadDirectory . '/' . $picture->getName());
+            $manager->persist($picture);
+
+            $video = new Video;
+            $video->setLink('<iframe src="https://www.youtube.com/embed/SDdfIqJLrq4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
+            $manager->persist($video);
+
             $trick = new Trick;
             $trick->setName($name)
-                ->setSlug($trick->getName())
+                ->setSlug(Strings::slug($trick->getName()))
                 ->setDescription($faker->text)
+                ->addPicture($picture)
+                ->addVideo($video)
                 ->setCategory($categorys->get(mt_rand(1, $categorys->count() - 1)))
                 ->setUser($user);
 

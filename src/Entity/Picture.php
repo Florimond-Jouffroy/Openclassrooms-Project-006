@@ -93,21 +93,22 @@ class Picture
         }
 
         $fileName = uniqid();
-
-        if (str_contains($this->name, '__UPDATING__')) {
-            if (!str_contains($this->name, 'default_profile')) {
-                unlink($this->filepath);
+        if (!str_contains($this->name, 'default')) {
+            if (str_contains($this->name, '__UPDATING__')) {
+                if (!str_contains($this->name, 'default_profile')) {
+                    unlink($this->filepath);
+                }
+                $this->name = str_replace('__UPDATING__', '', $this->name);
+                $uploadTo = str_replace('/' . $this->name, '', $this->filepath);
+            } else {
+                $this->name = sprintf('%s.%s', $fileName, $this->getFile()->getClientOriginalExtension());
+                $uploadTo = $this->pictureUploadDirectory;
             }
-            $this->name = str_replace('__UPDATING__', '', $this->name);
-            $uploadTo = str_replace('/' . $this->name, '', $this->filepath);
-        } else {
-            $this->name = sprintf('%s.%s', $fileName, $this->getFile()->getClientOriginalExtension());
-            $uploadTo = $this->pictureUploadDirectory;
-        }
 
-        $this->setFilepath($uploadTo . '/' . $this->name);
-        $this->getFile()->move($uploadTo, $this->name);
-        $this->file = null;
+            $this->setFilepath($uploadTo . '/' . $this->name);
+            $this->getFile()->move($uploadTo, $this->name);
+            $this->file = null;
+        }
     }
 
     #[ORM\PostRemove()]
