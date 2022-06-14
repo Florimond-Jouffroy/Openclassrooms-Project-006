@@ -67,3 +67,4 @@ Vous pourrez ensuite y renseigner les identifiants de votre base de données en 
 ```
 php bin/console doctrine:fixtures:load
 ```
+Vous trouverez dans le dossier public/uploads les images a copier dans le dossier public/pictures afin que les fixtures soit habiller d'images.
