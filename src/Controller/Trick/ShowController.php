@@ -48,11 +48,18 @@ class ShowController extends AbstractController
 
                 return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
             }
+
+            return $this->render('trick/show.html.twig', [
+                'trick' => $trick,
+                'form' => $form->createView(),
+                'comments' => $query,
+                'nbPages' => $nbPages,
+                'currentPage' => $page,
+            ]);
         }
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView(),
             'comments' => $query,
             'nbPages' => $nbPages,
             'currentPage' => $page,

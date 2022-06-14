@@ -215,8 +215,8 @@ class Trick
         return $this;
     }
 
-    public function isHis(User $user)
+    public function isHis(User $user): bool
     {
-        return ($user === $this->getUser()) ? true : false;
+        return ($user->getId() === $this->getUser()->getId()) ? true : false;
     }
 }

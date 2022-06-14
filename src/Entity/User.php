@@ -186,7 +186,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAccountValidated(): bool
     {
-        return null === $this->getValidationToken() ? true : false;
+        return 'null' === $this->getValidationToken() ? true : false;
     }
 
     /**

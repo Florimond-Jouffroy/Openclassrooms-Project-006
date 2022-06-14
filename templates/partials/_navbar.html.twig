@@ -45,15 +45,15 @@
 		{% if app.user %}
 			<div class="dropdown text-end d-none d-sm-block">
 				<a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-
 					<img src="{{app.user.pictureProfile is not null ? asset('pictures/' ~ app.user.pictureProfile.name) : asset('pictures/default_profile.jpg')}}" alt="mdo" width="32" height="32" class="rounded-circle">
-
 				</a>
 
 				<ul class="dropdown-menu text-small " aria-labelledby="dropdownUser1" style="">
-					<li>
-						<a class="dropdown-item" href="{{path('trick_new')}}">New Trick...</a>
-					</li>
+					{% if app.user.isAccountValidated %}
+						<li>
+							<a class="dropdown-item" href="{{path('trick_new')}}">New Trick...</a>
+						</li>
+					{% endif %}
 					<li>
 						<a class="dropdown-item" href="{{path('user_profile')}}">Profile</a>
 					</li>

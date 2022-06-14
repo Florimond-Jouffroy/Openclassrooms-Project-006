@@ -23,6 +23,13 @@ class EditController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function edit(Trick $trick = null, Request $request): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->isAccountValidated()) {
+            $this->addFlash('danger', "Vous devez valider votre compte pour faire cela !");
+            return $this->redirectToRoute('home');
+        }
+
         if (null !== $trick) {
             if (false === $trick->isHis($this->getUser())) {
                 $this->addFlash('danger', "You haven't the rights!!");
