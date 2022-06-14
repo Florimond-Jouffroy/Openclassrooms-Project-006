@@ -1,5 +1,6 @@
 # Snowtrick 🏂 - Openclassrooms Project
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/be9c8e1b209e4dd1812959215d1124dd)](https://www.codacy.com/gh/Florimond-Jouffroy/Openclassrooms-Project-006/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Florimond-Jouffroy/Openclassrooms-Project-006&amp;utm_campaign=Badge_Grade)
+
 Dans le cadre de la formation « Développeur d'application - PHP / Symfony d’OpenClassroom », j'ai réalisé un site communautaire avec le framework Symfony. le projet Snowtrick permet aux utilisateurs de documenter les différentes figures de snowboard et d'échanger sur celle-ci par le biais de commentaires.
 
 ## ⚙️Installation du projet
