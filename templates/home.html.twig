@@ -6,18 +6,19 @@
 
 {% block body %}
 
-	{% for label, messages in app.flashes %}
-		{% for message in messages %}
-
-			<div class="container mt-3 alert alert-{{ label }}">
-				{{ message }}
-			</div>
-		{% endfor %}
-	{% endfor %}
-
 	<div class="container-fluid d-flex flex-column" id="hero">
 
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="alert alert-{{ label }} alert-dismissible fade show m-1" role="alert">
+					{{ message }}
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			{% endfor %}
+		{% endfor %}
+
 		<div class="h-75 d-flex align-items-center justify-content-center">
+
 			<h1>SnowTricks</h1>
 		</div>
 
