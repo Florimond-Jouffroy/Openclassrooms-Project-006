@@ -2,14 +2,15 @@
 
 namespace App\Controller\User\Password;
 
-use App\Repository\PasswordRequestRepository;
+use App\Form\PasswordRequestType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\PasswordRequestRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ResetController extends AbstractController
 {
@@ -37,7 +38,7 @@ class ResetController extends AbstractController
             $newPassword = $form->getData('password');
             $user = $this->userRepository->findOneBy(['email' => $passwordRequest->getEmail()]);
 
-            $user->setPassword($this->passwordHasher->hashPassword($user, $newPassword['password']));
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $newPassword['password']));
 
             $this->em->persist($user);
             $this->em->remove($passwordRequest);
